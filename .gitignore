@@ -21,3 +21,6 @@ zola
 
 # Theme CSS that Zola writes on every build (the site styles highlighting in sass/style.scss)
 static/giallo-*.css
+
+# Zola binary downloaded by scripts/cf-pages-build.sh
+.zola-bin/
