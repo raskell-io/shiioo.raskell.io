@@ -2,83 +2,48 @@
 {% block body_class %}home{% endblock %}
 {% block content %}
 <section class="hero">
-    <div class="wrap hero-grid">
-        <div class="hero-copy">
-            <p class="eyebrow">{{ config.extra.pitch }}</p>
-            <h1>A staff of AI agents on your Mac, run from your phone.</h1>
-            <p class="lead">Shiioo turns the coding agents you already pay for, Claude Code on your Claude plan and Codex on your OpenAI plan, into employees of a small company whose only human is you. You hand out work from Telegram, they work in their own branches, your rules decide what they may do alone, the rest comes to your phone as a question, and everything they did is on the record.</p>
-            <div class="hero-actions">
-                <a class="btn btn-primary" href="/getting-started/">Set up the office</a>
-                <a class="btn" href="/how-it-works/">How it works</a>
-            </div>
-            <p class="hero-needs"><span>You need</span> a Mac that stays on · Claude Code or Codex · a Telegram bot · Tailscale</p>
-        </div>
-        <div class="hero-visual" aria-hidden="true">
-            <div class="phone">
-                <div class="phone-top"><span class="phone-title">shiioo</span><span class="phone-sub">bot</span></div>
-                <div class="chat">
-                    <div class="msg you"><code>/run sango fix the flaky test in tests/net.rs and open a PR</code></div>
-                    <div class="msg bot">▶️ <b>b619ff8d</b> started on sango (claude): fix the flaky test in tests/net.rs and open a PR<br><span class="dim">branch shiioo/b619ff8d</span></div>
-                    <div class="msg bot ask">🔐 <b>b619ff8d</b> wants to run<br><code>Bash: git push -u origin shiioo/b619ff8d</code>
-                        <div class="keys"><span class="key allow">✅ Allow</span><span class="key deny">⛔ Deny</span></div>
-                    </div>
-                    <div class="msg bot done">✅ <b>b619ff8d</b> finished: fix the flaky test in tests/net.rs and open a PR<br><span class="dim">Opened PR #42 from shiioo/b619ff8d. The retry loop in tests/net.rs waited on a fixed 50 ms; it now polls until the listener is ready.</span></div>
-                </div>
-            </div>
-            <img class="pixel mascot" src="{{ get_url(path='img/mascot.png') }}" alt="" width="256" height="256">
-        </div>
-    </div>
-</section>
-
-<section class="band how">
     <div class="wrap">
-        <h2>Five ideas, one binary.</h2>
-        <div class="cards">
-            <article class="card">
-                <h3>Employees are harnesses</h3>
-                <p>Claude Code and Codex run headless in a git worktree of your repository, on your subscriptions. Local models through Ollama, LM Studio or an MLX server serve Shiioo's own loop. Each is one <code>[[employees]]</code> entry; a task goes to the first whose subscription window isn't used up.</p>
-            </article>
-            <article class="card">
-                <h3>The office is one binary</h3>
-                <p><code>shiioo</code> is the server (the record, the rules, the API and dashboard, the Telegram bot, the workers) and the node that runs the agents, in one process on your machine. Its data is one directory with an embedded database. No Postgres, no containers. Another machine joins with <code>shiioo node</code> and works against the same record.</p>
-            </article>
-            <article class="card">
-                <h3>The record is the only state</h3>
-                <p>Every run is an append-only, hash-chained event log: each model message, tool call, result, rule verdict and approval. Workers hold fenced leases, so a crash, a sleeping laptop or a lost connection means the run resumes from its log, and a side effect never silently happens twice.</p>
-            </article>
-            <article class="card">
-                <h3>Rules first, you second</h3>
-                <p><code>rules.toml</code> says what agents may do without asking: allow, ask or deny per tool, command, path and repo. Before every tool call the harness asks Shiioo. Most calls are decided at once; the rest wait for your tap. A dead server means deny, never an unguarded agent. At the <code>container</code> level the agent also can't reach hosts you haven't allowed.</p>
-            </article>
-            <article class="card">
-                <h3>Your phone is the interface</h3>
-                <p>Telegram to delegate, approve and be told when something finished or needs you; <code>/plan</code> to hand a goal to the chief of staff, <code>/report</code> for the morning report. A mobile dashboard over Tailscale for the live log, the diff and the buttons. No public address anywhere: the bot long-polls, the dashboard sits on your tailnet.</p>
-            </article>
+        <p class="eyebrow"><span class="idx">{{ config.extra.pitch }}</span><span class="sep">·</span>open source<span class="sep">·</span>one Rust binary<span class="sep">·</span>your Mac, your phone</p>
+        <h1>A staff of AI agents on your Mac,<br>run from your phone.</h1>
+        <p class="lead">Claude Code on your Claude plan, Codex on your OpenAI plan, local models on your own hardware: employees of a small company whose only human is you. You hand out work from Telegram. They work in their own branches. Your rules decide what they may do alone; the rest reaches your phone as a question. Everything they did is on the record.</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="/getting-started/">Set up the office</a>
+            <a class="btn" href="/how-it-works/">How it works</a>
+            <a class="btn btn-ghost" href="{{ config.extra.github }}">Source</a>
         </div>
+    </div>
+    <div class="wrap hero-figure">
+        <figure class="figure big diagram">
+            {% include "diagrams/office.svg.html" %}
+            <figcaption>One process on your machine holds the record, the rules and the workers. Agents run as employees in their own branches, or on other machines that dial in. Your phone is the only interface you need.</figcaption>
+        </figure>
     </div>
 </section>
 
-<section class="band band-alt record">
-    <div class="wrap record-grid">
-        <div class="record-copy">
-            <p class="eyebrow">On the record</p>
+<section class="chapter" id="record">
+    <div class="wrap">
+        <div class="chapter-copy wide">
+            <p class="eyebrow"><span class="idx">01</span>The record</p>
             <h2>Everything an agent did, in order, provably.</h2>
-            <p>A run's log is the thing itself, not a report about it. The worker writes what it is about to do before it does it, so a crash at any point leaves a log that says exactly what did and didn't happen. Each event carries its position, the lease epoch it was written under, and the hash of the event before it; change a byte anywhere and verification fails.</p>
-            <ul class="ticks">
-                <li><b>Fenced leases.</b> Only the current lease holder can append. A stalled worker that wakes up after a takeover is refused, and so is the late tool call it tries to send.</li>
-                <li><b>Write before acting.</b> The model's response is recorded before any tool runs; a tool call is recorded as an intent before it is dispatched and as a result after.</li>
-                <li><b>No blind retries.</b> Pure and idempotent calls are re-run after a crash; a side-effecting call whose outcome is unknown stops the run and asks you.</li>
-            </ul>
+            <p>A run's log is the thing itself, not a report about it. The worker writes what it is about to do before it does it, so a crash at any point leaves a log that says exactly what did and didn't happen. Each event carries its position, the lease epoch it was written under and the hash of the event before it. Change a byte anywhere and verification fails.</p>
         </div>
-        <pre class="log" aria-label="A run's log"><code><span class="n">#0</span>  run created: Append a line to README.md and commit it
+        <figure class="figure diagram">
+            {% include "diagrams/chain.svg.html" %}
+            <figcaption>Each event carries its position, the lease epoch it was written under and the hash of the one before it. A stalled worker's late write, under an older epoch, is refused and never recorded.</figcaption>
+        </figure>
+        <ul class="ticks cols">
+            <li><b>Fenced leases.</b> One worker owns a run at a time, each lease with a higher epoch. A stalled worker that wakes up after a takeover is refused, and so is the late tool call it tries to send.</li>
+            <li><b>Write before acting.</b> The model's response is recorded before any tool runs; a tool call is recorded as an intent before it is dispatched, and as a result after.</li>
+            <li><b>No blind retries.</b> Pure and idempotent calls run again after a crash; a side-effecting call whose outcome is unknown stops the run and asks you.</li>
+        </ul>
+        <pre class="log" aria-label="A real run's log"><code><span class="n">#0</span>  run created: Append a line to README.md and commit it
 <span class="n">#1</span>  lease acquired by local-70065 (epoch 1)
-<span class="n">#2</span>  claude-code session 91ccb674… (claude-haiku-5-5)
-<span class="n">#4</span>  → Bash {"command":"tail -c 200 README.md | od -c | tail -5 && git status --short"}
-<span class="n">#5</span>  capacity claude-code: 5h 19%, 7d 5% used
+<span class="n">#2</span>  isolation: container (shiioo-db2426e0, egress allowlist)
+<span class="n">#3</span>  claude-code session 91ccb674… (claude-haiku-5-5)
+<span class="n">#5</span>  → Bash {"command":"tail -c 200 README.md | od -c | tail -5 && git status --short"}
 <span class="n">#6</span>  <span class="ask">rules: ask Bash (segment "od -c": default: ask)</span>
 <span class="n">#7</span>  <span class="ask">waiting for approval: Bash: tail -c 200 README.md | od -c | …</span>
 <span class="n">#8</span>  <span class="ok">allow by owner</span>
-<span class="n">#9</span>  ← /Users/me/shiioo-office/.shiioo/worktrees/db2426e0-…
 <span class="n">#12</span> → Bash {"command":"printf 'Dashboard check.\n' >> README.md && git commit -qam …"}
 <span class="n">#13</span> <span class="ok">rules: allow Bash (rule 59 (Bash|shell `printf *`): allow)</span>
 <span class="n">#14</span> ← 5702552 docs: dashboard check  1 file changed, 1 insertion(+)
@@ -87,59 +52,119 @@
     </div>
 </section>
 
-<section class="band staff">
-    <div class="wrap">
-        <div class="staff-head">
-            <p class="eyebrow">The staff</p>
-            <h2>Hire the agents you already have.</h2>
+<section class="chapter alt" id="rules">
+    <div class="wrap chapter-grid reverse">
+        <div class="chapter-copy">
+            <p class="eyebrow"><span class="idx">02</span>Rules first, you second</p>
+            <h2>Autonomous by default. Approvals by exception.</h2>
+            <p><code>rules.toml</code> says what agents may do without asking: allow, ask or deny per tool, command, path and repository. Before every tool call the harness asks Shiioo through a hook. Reads, edits, builds and commits are decided at once; a push, a <code>gh</code> call, an install or a command nobody has seen before waits for your tap. A dead office means deny, never an unguarded agent.</p>
+            <p>The same gate covers mail: an agent that wants to write to someone asks the office, and the office asks you.</p>
         </div>
-        <img class="pixel staff-sheet" src="{{ get_url(path='img/staff.png') }}" alt="Sixteen pixel-art portraits of the Shiioo mascot in different moods" width="512" height="512" loading="lazy">
-        <div class="staff-grid">
-            <div>
-                <h3>Claude Code</h3>
-                <p>Driven in its headless print mode, in a worktree of your repo, with the same login you use in the terminal. Every message and tool call is recorded; a crashed worker resumes the very same session. Its five-hour and seven-day windows are read from its output and shown on your phone.</p>
-            </div>
-            <div>
-                <h3>Codex</h3>
-                <p>Driven through <code>codex exec --json</code> with the same approval hook: before each command Codex asks Shiioo, and your rules or your tap decide. Its own OS sandbox is off, because headless Codex can't ask you and its sandbox would block every commit; the hook is the gate, and the <code>container</code> level is the sandbox.</p>
-            </div>
-            <div>
-                <h3>Local models</h3>
-                <p>Shiioo's own agent loop against anything that speaks the OpenAI chat API: Ollama, LM Studio, an MLX server. Name a model <code>ollama/qwen3:32b</code> and it runs on your hardware, for planning, triage and bulk work that shouldn't spend a subscription.</p>
-            </div>
-        </div>
-        <p class="staff-note">Tasks go to the first employee whose windows are under their limits; <code>/capacity</code> shows what is left this week.</p>
+        <figure class="figure diagram">
+            {% include "diagrams/approval.svg.html" %}
+            <figcaption>Before every tool call the harness asks the office. Allow and deny answer at once; ask becomes two buttons on your phone, and the harness waits for your tap.</figcaption>
+        </figure>
     </div>
 </section>
 
-<section class="band band-alt status">
+<section class="chapter" id="where">
     <div class="wrap">
-        <p class="eyebrow">Status</p>
-        <h2>What works today, and what doesn't yet.</h2>
+        <div class="chapter-copy wide">
+            <p class="eyebrow"><span class="idx">03</span>Where it runs</p>
+            <h2>Your user, a container, or a sandbox. Here, or on the Spark.</h2>
+            <p>At the default level an agent is your user in its own branch. Set a repository to <code>container</code> and each run gets a Docker container with a read-only root, only its worktree mounted, and a network whose only way out is a proxy that admits the hosts you allow. Secrets are references the office resolves at start and redacts from everything it records.</p>
+        </div>
+        <div class="figure-stack">
+            <figure class="figure diagram">
+                {% include "diagrams/isolation.svg.html" %}
+                <figcaption>Isolation levels, set per office, repository or run.</figcaption>
+            </figure>
+            <figure class="figure diagram">
+                {% include "diagrams/machines.svg.html" %}
+                <figcaption>Other machines enroll once, then dial out and take the runs addressed to them. Same worker code, same record.</figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+
+<section class="chapter alt" id="day">
+    <div class="wrap">
+        <div class="chapter-copy wide">
+            <p class="eyebrow"><span class="idx">04</span>A day at the office</p>
+            <h2>You set direction. The company does the work.</h2>
+            <p>The morning report counts what finished, what needs you and which branches await review. <code>/plan</code> hands a goal to the chief of staff, who reads the repository and proposes work items; your approval turns them into issues the office works through. Routines run on a schedule you can type. Files a run produced land on your phone; mail goes out only after you say so.</p>
+        </div>
+        <figure class="figure diagram">
+            {% include "diagrams/day.svg.html" %}
+            <figcaption>One day as your phone sees it: the morning report, a plan approved on the way to work, three runs on two machines, a file, one mail you allowed, the tests at night.</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="chapter" id="staff">
+    <div class="wrap">
+        <div class="chapter-copy wide">
+            <p class="eyebrow"><span class="idx">05</span>The staff</p>
+            <h2>Hire the agents you already have.</h2>
+        </div>
+        <div class="roster">
+            <article class="card">
+                <div class="portrait p1" role="img" aria-label="Pixel portrait of the Shiioo mascot"></div>
+                <h3>Claude Code</h3>
+                <p>Driven headless in its print mode, in a worktree of your repo, with the same login you use in the terminal. Every message and tool call is recorded; a crashed worker resumes the very same session. Its five-hour and seven-day windows are read from its output and shown on your phone.</p>
+            </article>
+            <article class="card">
+                <div class="portrait p2" role="img" aria-label="Pixel portrait of the Shiioo mascot, thinking"></div>
+                <h3>Codex</h3>
+                <p>Driven through <code>codex exec --json</code> with the same approval hook: before each command Codex asks Shiioo, and your rules or your tap decide. Its own OS sandbox is off because headless Codex can't ask you and its sandbox blocks every commit; the hook is the gate and the container level is the sandbox.</p>
+            </article>
+            <article class="card">
+                <div class="portrait p3" role="img" aria-label="Pixel portrait of the Shiioo mascot, pleased"></div>
+                <h3>Local models</h3>
+                <p>Shiioo's own agent loop against anything that speaks the OpenAI chat API: Ollama, LM Studio, an MLX server. Name a model <code>ollama/qwen3:32b</code> and it runs on your hardware, for planning, triage and bulk work that shouldn't spend a subscription.</p>
+            </article>
+            <article class="card">
+                <div class="portrait p4" role="img" aria-label="Pixel portrait of the Shiioo mascot, in a suit"></div>
+                <h3>The chief of staff</h3>
+                <p>Not a model, a role the office plays: <code>/plan</code> runs a read-only planning job and turns its answer into a plan you approve; the report, the routines and the capacity broker decide who works when. Soon a conversation you can have while walking: that phase is a requirements draft.</p>
+            </article>
+        </div>
+        <p class="staff-note">Tasks go to the first employee whose subscription windows are under their limits; <code>/capacity</code> shows what is left this week.</p>
+    </div>
+</section>
+
+<section class="chapter alt" id="status">
+    <div class="wrap">
+        <div class="chapter-copy wide">
+            <p class="eyebrow"><span class="idx">06</span>Where it stands</p>
+            <h2>Six phases built. Honestly marked.</h2>
+        </div>
+        <figure class="figure diagram">
+            {% include "diagrams/roadmap.svg.html" %}
+            <figcaption>Six phases built and verified against the real tools. Conversation is a requirements draft; replay is planned.</figcaption>
+        </figure>
         <table class="status-table">
             <tbody>
                 <tr><td>Kernel: event log, hash chain, leases with fencing, crash recovery, embedded store</td><td class="built">built, conformance-tested, plus a seeded crash simulation</td></tr>
                 <tr><td>Claude Code and Codex as employees, worktree per run, resume after a crash</td><td class="built">built, verified with the real binaries</td></tr>
-                <tr><td>Rules, approvals through the harness hook, cancellation</td><td class="built">built, verified live</td></tr>
-                <tr><td>Telegram bot and mobile dashboard</td><td class="built">built; bot tested against a fake server, dashboard in a browser</td></tr>
-                <tr><td><code>shiioo install</code>: login service, keep-awake</td><td class="built">built on macOS; Linux unit untested</td></tr>
+                <tr><td>Rules, approvals through the harness hook, cancellation, Telegram bot and mobile dashboard</td><td class="built">built, approval loop verified live</td></tr>
                 <tr><td>Capacity broker, local models, GitHub-issue intake</td><td class="built">built; untested against a live Ollama</td></tr>
-                <tr><td><code>container</code> isolation: Docker per run, read-only root, only the worktree mounted, egress through an allow list; encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
+                <tr><td><code>container</code> isolation, egress allow list, encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
+                <tr><td><code>/plan</code>, routines on a typed schedule, the morning report, roles</td><td class="built">built, planner verified live</td></tr>
+                <tr><td>Remote nodes, deliverables to the phone, mail with send-approval</td><td class="built">built; nodes verified live, the rest end to end over HTTP</td></tr>
                 <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
-                <tr><td>The company: <code>/plan</code> (a chief-of-staff run whose approval becomes issues), routines on a typed schedule, the morning report, roles</td><td class="built">built, planner verified live</td></tr>
-                <tr><td>Remote nodes: another machine runs <code>shiioo node</code> and takes the runs addressed to it, against the office's log over HTTP</td><td class="built">built, verified live with a node process</td></tr>
-                <tr><td>Deliverables sent to the phone (<code>/files</code>, <code>/get</code>) and mail with send-approval</td><td class="built">built, end to end over HTTP</td></tr>
+                <tr><td>Talking to Shiioo: voice notes, a chief of staff you converse with</td><td class="planned">requirements draft</td></tr>
                 <tr><td>Fork and replay, a node login service, mail reading</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
-        <p class="status-note">By default an agent runs as your user in its worktree, with no OS sandbox; the rules and your approvals are what stand between it and your machine. Set <code>[isolation] default = "container"</code> and each run gets a Docker container with only its worktree mounted and only the hosts you allow reachable; <code>shiioo secret set</code> keeps the tokens it needs out of the record.</p>
+        <p class="status-note">By default an agent runs as your user in its worktree, with no OS sandbox; the rules and your approvals are what stand between it and your machine. Set <code>[isolation] default = "container"</code> and each run gets a Docker container with only its worktree mounted and only the hosts you allow reachable.</p>
     </div>
 </section>
 
-<section class="band quick">
+<section class="chapter quick" id="start">
     <div class="wrap quick-grid">
         <div>
-            <p class="eyebrow">Quick start</p>
+            <p class="eyebrow"><span class="idx">07</span>Quick start</p>
             <h2>Three commands on the Mac, then your phone.</h2>
             <p>Log in once to <code>claude</code> and/or <code>codex</code>, create a bot with @BotFather, then:</p>
         </div>
@@ -156,7 +181,7 @@ shiioo --workspace ~/shiioo-office install</code></pre>
 <section class="cta">
     <div class="wrap">
         <h2>Your work, delegated. Your record, intact.</h2>
-        <div class="hero-actions">
+        <div class="hero-actions center">
             <a class="btn btn-primary" href="/getting-started/">Getting started</a>
             <a class="btn" href="{{ config.extra.github }}">Source on GitHub</a>
         </div>

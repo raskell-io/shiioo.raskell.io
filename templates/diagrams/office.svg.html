@@ -1,0 +1,97 @@
+<svg class="schematic office" viewBox="0 0 760 440" role="img" aria-labelledby="office-title office-desc">
+  <title id="office-title">How Shiioo is wired</title>
+  <desc id="office-desc">Your phone talks to the office, one Rust binary on your Mac holding the record, the rules and the workers. The office runs Claude Code, Codex and local models in their own branches of your repositories. Other machines dial in as nodes.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+  </defs>
+
+  <!-- you -->
+  <g class="node phone" transform="translate(24 120)">
+    <rect x="0" y="0" width="118" height="200" rx="18" class="box dark"/>
+    <rect x="10" y="12" width="98" height="176" rx="12" class="screen"/>
+    <text x="59" y="-12" class="label" text-anchor="middle">you · telegram</text>
+    <rect x="42" y="26" width="58" height="22" rx="8" class="bubble you"/>
+    <rect x="18" y="56" width="70" height="30" rx="8" class="bubble bot"/>
+    <rect x="18" y="94" width="76" height="40" rx="8" class="bubble ask"/>
+    <rect x="24" y="118" width="28" height="10" rx="4" class="key allow"/>
+    <rect x="58" y="118" width="30" height="10" rx="4" class="key deny"/>
+    <rect x="18" y="144" width="66" height="26" rx="8" class="bubble done"/>
+  </g>
+
+  <!-- office -->
+  <g class="node office" transform="translate(236 70)">
+    <rect x="0" y="0" width="256" height="300" rx="16" class="box"/>
+    <text x="16" y="-12" class="label">the office · one binary · your mac</text>
+    <!-- record -->
+    <rect x="16" y="20" width="224" height="78" rx="10" class="inner"/>
+    <text x="28" y="40" class="title">the record</text>
+    <g class="chain" transform="translate(28 52)">
+      <rect x="0" y="0" width="34" height="30" rx="5" class="ev"/>
+      <rect x="44" y="0" width="34" height="30" rx="5" class="ev"/>
+      <rect x="88" y="0" width="34" height="30" rx="5" class="ev"/>
+      <rect x="132" y="0" width="34" height="30" rx="5" class="ev"/>
+      <rect x="176" y="0" width="34" height="30" rx="5" class="ev new"/>
+      <path d="M34 15 h10 M78 15 h10 M122 15 h10 M166 15 h10" class="link"/>
+      <text x="17" y="19" class="mono" text-anchor="middle">#0</text>
+      <text x="61" y="19" class="mono" text-anchor="middle">#1</text>
+      <text x="105" y="19" class="mono" text-anchor="middle">#2</text>
+      <text x="149" y="19" class="mono" text-anchor="middle">#3</text>
+      <text x="193" y="19" class="mono accent" text-anchor="middle">#4</text>
+    </g>
+    <!-- rules -->
+    <rect x="16" y="112" width="224" height="62" rx="10" class="inner"/>
+    <text x="28" y="132" class="title">the rules</text>
+    <text x="28" y="156" class="mono small"><tspan class="ok">allow</tspan>  <tspan class="warn">ask</tspan>  <tspan class="bad">deny</tspan>  <tspan class="muted">· rules.toml</tspan></text>
+    <!-- workers -->
+    <rect x="16" y="188" width="224" height="62" rx="10" class="inner"/>
+    <text x="28" y="208" class="title">the workers</text>
+    <text x="28" y="232" class="mono small muted">leases · worktrees · hooks</text>
+    <!-- mascot -->
+    <image href="/img/mascot.png" x="186" y="236" width="64" height="64" class="pixel"/>
+    <text x="20" y="282" class="mono small muted">api · dashboard · bot</text>
+  </g>
+
+  <!-- employees -->
+  <g class="node employees" transform="translate(556 60)">
+    <text x="0" y="-2" class="label">employees</text>
+    <g class="emp" transform="translate(0 12)">
+      <rect x="0" y="0" width="180" height="56" rx="10" class="box"/>
+      <text x="14" y="24" class="title">Claude Code</text>
+      <text x="14" y="44" class="mono small muted">claude max · worktree</text>
+    </g>
+    <g class="emp" transform="translate(0 84)">
+      <rect x="0" y="0" width="180" height="56" rx="10" class="box"/>
+      <text x="14" y="24" class="title">Codex</text>
+      <text x="14" y="44" class="mono small muted">openai plan · container</text>
+    </g>
+    <g class="emp" transform="translate(0 156)">
+      <rect x="0" y="0" width="180" height="56" rx="10" class="box"/>
+      <text x="14" y="24" class="title">local model</text>
+      <text x="14" y="44" class="mono small muted">ollama/qwen3 · your gpu</text>
+    </g>
+    <!-- branches -->
+    <g class="branches" transform="translate(0 236)">
+      <rect x="0" y="0" width="180" height="60" rx="10" class="inner"/>
+      <text x="14" y="22" class="title">your repositories</text>
+      <text x="14" y="44" class="mono small"><tspan class="accent">⎇ shiioo/1a2b</tspan> <tspan class="muted">→ PR #42</tspan></text>
+    </g>
+  </g>
+
+  <!-- node -->
+  <g class="node spark" transform="translate(296 380)">
+    <rect x="0" y="0" width="150" height="44" rx="10" class="box dashed"/>
+    <text x="14" y="20" class="title">spark · node</text>
+    <text x="14" y="36" class="mono small muted">gpu=true · dials out</text>
+  </g>
+
+  <!-- wires -->
+  <path d="M142 220 C 190 220, 190 220, 236 220" class="wire flow a" marker-end="url(#arrow)"/>
+  <path d="M236 160 C 190 160, 190 160, 142 160" class="wire flow b" marker-end="url(#arrow)"/>
+  <path d="M492 130 C 520 130, 530 100, 556 100" class="wire flow c" marker-end="url(#arrow)"/>
+  <path d="M492 200 C 520 200, 530 172, 556 172" class="wire flow c" marker-end="url(#arrow)"/>
+  <path d="M492 260 C 520 260, 530 244, 556 244" class="wire flow c" marker-end="url(#arrow)"/>
+  <path d="M646 272 L 646 296" class="wire thin"/>
+  <path d="M371 380 C 371 376, 371 374, 371 370" class="wire thin dashed" marker-end="url(#arrow)"/>
+  <text x="520" y="86" class="mono small muted">before every command:</text>
+  <text x="520" y="100" class="mono small muted">“may I?” → rules → you</text>
+</svg>

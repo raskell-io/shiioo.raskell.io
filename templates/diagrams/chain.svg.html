@@ -1,0 +1,56 @@
+<svg class="schematic chain-diagram" viewBox="0 0 960 230" role="img" aria-labelledby="chain-title chain-desc">
+  <title id="chain-title">The record: an append-only, hash-chained log per run</title>
+  <desc id="chain-desc">Each event carries its position, the lease epoch it was written under and the hash of the event before it. A worker with a stale epoch is fenced: its write is refused.</desc>
+  <defs>
+    <marker id="chain-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+  </defs>
+  <g class="events" transform="translate(16 40)">
+    <g class="event" transform="translate(0 0)">
+      <rect width="140" height="92" rx="10" class="box"/>
+      <text x="12" y="22" class="mono small muted">#0 · epoch 0</text>
+      <text x="12" y="46" class="title">run created</text>
+      <text x="12" y="74" class="mono tiny muted">hash a91f…</text>
+    </g>
+    <path d="M140 46 h14" class="link" marker-end="url(#chain-arrow)"/>
+    <g class="event" transform="translate(154 0)">
+      <rect width="140" height="92" rx="10" class="box"/>
+      <text x="12" y="22" class="mono small muted">#1 · epoch 1</text>
+      <text x="12" y="46" class="title">lease acquired</text>
+      <text x="12" y="74" class="mono tiny muted">prev a91f… → 3c0e…</text>
+    </g>
+    <path d="M294 46 h14" class="link" marker-end="url(#chain-arrow)"/>
+    <g class="event" transform="translate(308 0)">
+      <rect width="140" height="92" rx="10" class="box"/>
+      <text x="12" y="22" class="mono small muted">#2 · epoch 1</text>
+      <text x="12" y="46" class="title">→ Bash</text>
+      <text x="12" y="62" class="mono tiny muted">logged before it runs</text>
+      <text x="12" y="80" class="mono tiny muted">prev 3c0e… → 77d2…</text>
+    </g>
+    <path d="M448 46 h14" class="link" marker-end="url(#chain-arrow)"/>
+    <g class="event" transform="translate(462 0)">
+      <rect width="140" height="92" rx="10" class="box"/>
+      <text x="12" y="22" class="mono small muted">#3 · epoch 1</text>
+      <text x="12" y="46" class="title"><tspan class="warn">ask</tspan> → allowed</text>
+      <text x="12" y="62" class="mono tiny muted">by you, on the phone</text>
+      <text x="12" y="80" class="mono tiny muted">prev 77d2… → b140…</text>
+    </g>
+    <path d="M602 46 h14" class="link" marker-end="url(#chain-arrow)"/>
+    <g class="event appearing" transform="translate(616 0)">
+      <rect width="140" height="92" rx="10" class="box accent-border"/>
+      <text x="12" y="22" class="mono small muted">#4 · epoch 1</text>
+      <text x="12" y="46" class="title">← result</text>
+      <text x="12" y="74" class="mono tiny muted">prev b140… → e5a7…</text>
+    </g>
+    <!-- fenced attempt -->
+    <g class="event fenced" transform="translate(790 0)">
+      <rect width="140" height="92" rx="10" class="box bad-border"/>
+      <text x="12" y="22" class="mono small muted">#4 · <tspan class="bad">epoch 0</tspan></text>
+      <text x="12" y="46" class="title bad">✗ fenced</text>
+      <text x="12" y="62" class="mono tiny muted">a stalled worker’s</text>
+      <text x="12" y="80" class="mono tiny muted">late write, refused</text>
+    </g>
+  </g>
+  <text x="16" y="170" class="mono small muted">write before acting · verified by shiioo log · change a byte and the chain breaks</text>
+  <path d="M16 190 h928" class="rule-line"/>
+  <text x="16" y="214" class="mono small"><tspan class="accent">●</tspan> <tspan class="muted">one lease at a time, each with a higher epoch</tspan>   <tspan class="bad">●</tspan> <tspan class="muted">older epoch: rejected, never recorded</tspan></text>
+</svg>

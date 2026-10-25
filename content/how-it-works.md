@@ -11,6 +11,11 @@ next = { title = "Design", url = "/design/" }
 
 Every run has an append-only, hash-chained event log, and that log is the only state. Workers hold nothing they cannot rebuild from it. Live streams, crash recovery, the audit trail, the phone's status line: all of them are reads of the same log. When a design question comes up, the first question is "which events does this write, and who may write them?"
 
+<figure class="figure diagram">
+{% include "diagrams/chain.svg.html" %}
+<figcaption>A run's log: every event carries its position, the lease epoch and the previous hash. A worker with an older epoch is fenced.</figcaption>
+</figure>
+
 A run's log, as `shiioo log` prints it:
 
 ```text
@@ -94,6 +99,11 @@ Each run on a repository gets its own git worktree and a `shiioo/<run>` branch, 
 
 Before every tool call, the harness runs `shiioo hook pre-tool-use` (inside a container, a `curl` call to the same office), a hook both Claude Code and Codex support. The hook posts the planned call to the office. The office judges it against `rules.toml`: `allow` and `deny` answer at once, with the rule's reason; `ask` records an approval request, sends it to your phone, and holds the hook's request open until you answer or six hours pass. The hook then prints the decision and the harness proceeds or refuses the call, telling the model why.
 
+<figure class="figure diagram">
+{% include "diagrams/approval.svg.html" %}
+<figcaption>Before every tool call the harness asks the office. Allow and deny answer at once; ask becomes two buttons on your phone.</figcaption>
+</figure>
+
 The hook fails closed. If the office is unreachable, the hook denies. A dead server never means an unguarded agent.
 
 On the phone an `ask` is a message with the command and two buttons:
@@ -109,6 +119,11 @@ In the dashboard it is a card on the run's page with the same two buttons. The d
 ## Isolation and secrets
 
 Where a run executes is a setting of the office, of a repository or of one run, and every run records it as its first step after the lease (`isolation: container (shiioo-0fd1bd4e, egress allowlist)`).
+
+<figure class="figure diagram">
+{% include "diagrams/isolation.svg.html" %}
+<figcaption>Where a run executes: your user, a container with an egress allow list, or an OpenShell sandbox.</figcaption>
+</figure>
 
 - **`worktree`**, the default: the harness runs as your user in the run's worktree, with your files and network. The rules and your approvals are the whole defence.
 - **`container`**: the harness runs in a Docker (or Podman) container per run, through the engine you already have. Read-only root filesystem, no capabilities, `no-new-privileges`, a pid limit, optional CPU and memory limits. Only the run's worktree and the repository's `.git` are mounted, at their host paths, so the worktree's `.git` pointer resolves and commits land on the run's branch exactly as at `worktree`. A home directory per run under `.shiioo/sandboxes/` is kept, so a crashed run resumes the same Claude Code or Codex session inside a fresh container. The image is built on first use from a Dockerfile embedded in the binary: Node, git, the GitHub CLI, the build tools, Claude Code and Codex. Codex logs in with your `auth.json` mounted read-only; Claude Code needs a token from `claude setup-token`, stored as the secret `claude-code-oauth-token`, because its keychain login cannot cross into a container.
@@ -133,6 +148,11 @@ Label an issue `shiioo` in one of your configured repositories and, with `[intak
 
 Three pieces turn single runs into a staff that keeps working, all built from the primitives above.
 
+<figure class="figure diagram">
+{% include "diagrams/day.svg.html" %}
+<figcaption>A day: report, plan, approval, runs, deliverables, a mail approval, a routine at night.</figcaption>
+</figure>
+
 - **Roles** (`[[roles]]`) are agent configurations the owner names with `@`: an employee or the broker's choice, instructions, a tool allow list, a model, an isolation level and limits, laid over the employee's defaults for that run.
 - **Routines** (`[[routines]]`) start runs on a schedule written the way one would say it: `hourly`, `every 6h`, `daily 02:00`, `weekdays 07:00`, `mon,thu 09:30`. A scheduler in the server checks every thirty seconds what is due; what fired is kept in `.shiioo/routines-state.json`, so a restart neither fires a routine twice nor backfills what was missed while the office was down. The **morning report** is scheduled the same way and counted from the record and the repositories: runs finished, failed or needing the owner since the last report, approvals waiting, `shiioo/*` branches with unmerged commits, capacity left, the next routines.
 - **The chief of staff** is a planning run. `/plan <repo> <goal>` starts a harness in the repository with read-only tools and instructions to study the project and answer with one to twelve work items as JSON. The office parses the answer into a plan (`.shiioo/plans.json`) and sends it to the phone; `/plan approve <id>` creates one GitHub issue per item carrying the intake's label, in order, and the intake works them. The planner changes nothing and needs no approvals; the owner's approval is the plan's. A plan the office cannot read fails with the planner's words, never with a guess.
@@ -140,6 +160,11 @@ Three pieces turn single runs into a staff that keeps working, all built from th
 ## Machines
 
 Another computer joins the office by running `shiioo node`. It is not a sandbox and not a tool executor: it is a worker, the same code that drives runs in the office, pointed at the office's log over HTTP. It enrolls once with a one-time token, keeps a machine token of its own, and from then on dials out: a heartbeat and a long poll for runs addressed to it (`/run on:spark …`, or by a label such as `on:gpu=true`). It takes the lease, works in its own worktree of its own clone of the repository (found by label in its config), asks the office before every command through the same hook, and appends every event to the office's record. Fencing holds across the wire: the store's errors travel in a form that keeps their meaning, so a node that lost its lease is refused exactly as a local worker would be. The office never connects to the node; over Tailscale nothing listens anywhere but the office.
+
+<figure class="figure diagram">
+{% include "diagrams/machines.svg.html" %}
+<figcaption>Nodes dial out to the office and work against its record over HTTP.</figcaption>
+</figure>
 
 ## Deliverables and mail
 

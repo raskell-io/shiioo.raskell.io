@@ -16,6 +16,11 @@ next = { title = "How it works", url = "/how-it-works/" }
 - **Repositories on disk.** The agents work in git worktrees of repositories you have cloned on the Mac.
 - **Rust** (`cargo`), to build the binary. There are no releases yet.
 
+<figure class="figure diagram">
+{% include "diagrams/office.svg.html" %}
+<figcaption>What you are setting up: the office on the Mac, your phone on Telegram, the agents in their own branches.</figcaption>
+</figure>
+
 ## Install
 
 ```sh

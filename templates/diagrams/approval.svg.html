@@ -1,0 +1,50 @@
+<svg class="schematic approval-diagram" viewBox="0 0 480 490" role="img" aria-labelledby="approval-title approval-desc">
+  <title id="approval-title">Rules first, you second</title>
+  <desc id="approval-desc">Before every tool call the harness asks the office through a hook. The rules allow or deny at once, or ask; an ask becomes a message with Allow and Deny buttons on your phone, and the harness waits for the answer.</desc>
+  <defs>
+    <marker id="ap-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+  </defs>
+  <text x="44" y="20" class="mono small muted">a dead office means deny. never an unguarded agent.</text>
+  <!-- harness -->
+  <g transform="translate(44 36)">
+    <rect width="220" height="84" rx="12" class="box"/>
+    <text x="14" y="24" class="title">harness</text>
+    <text x="14" y="46" class="mono small muted">Claude Code · Codex</text>
+    <text x="14" y="70" class="mono small">→ Bash <tspan class="muted">git push -u origin …</tspan></text>
+  </g>
+  <path d="M154 120 v34" class="wire flow a" marker-end="url(#ap-arrow)"/>
+  <text x="166" y="141" class="mono tiny muted">hook · before every tool call</text>
+  <!-- rules -->
+  <g transform="translate(44 154)">
+    <rect width="280" height="150" rx="12" class="box"/>
+    <text x="14" y="24" class="title">the office · rules.toml</text>
+    <g transform="translate(14 40)">
+      <rect width="252" height="26" rx="6" class="lane ok-lane"/>
+      <text x="10" y="17" class="mono small"><tspan class="ok">allow</tspan> <tspan class="muted">reads, edits, builds, commits</tspan></text>
+    </g>
+    <g transform="translate(14 72)">
+      <rect width="252" height="26" rx="6" class="lane bad-lane"/>
+      <text x="10" y="17" class="mono small"><tspan class="bad">deny</tspan> <tspan class="muted">sudo, rm -rf /, force push</tspan></text>
+    </g>
+    <g transform="translate(14 104)" class="ask-lane-group">
+      <rect width="252" height="26" rx="6" class="lane warn-lane"/>
+      <text x="10" y="17" class="mono small"><tspan class="warn">ask</tspan> <tspan class="muted">push, gh, installs, the unknown</tspan></text>
+    </g>
+  </g>
+  <!-- ask → phone -->
+  <path d="M310 271 C 350 271, 352 296, 352 322" class="wire flow b" marker-end="url(#ap-arrow)"/>
+  <text x="364" y="300" class="mono tiny muted">to your phone</text>
+  <g transform="translate(176 322)">
+    <rect width="288" height="124" rx="16" class="box dark"/>
+    <rect x="10" y="10" width="268" height="104" rx="12" class="screen"/>
+    <text x="24" y="36" class="mono small light">🔐 1a2b wants to run</text>
+    <text x="24" y="56" class="mono small light">Bash: git push -u origin shiioo/1a2b</text>
+    <rect x="24" y="72" width="112" height="30" rx="8" class="key allow big"/>
+    <text x="80" y="92" class="mono small" text-anchor="middle">✅ Allow</text>
+    <rect x="148" y="72" width="112" height="30" rx="8" class="key deny big"/>
+    <text x="204" y="92" class="mono small" text-anchor="middle">⛔ Deny</text>
+  </g>
+  <!-- back to the harness -->
+  <path d="M176 384 C 110 384, 14 384, 14 330 L 14 110 C 14 92, 26 78, 44 78" class="wire flow c dashed" marker-end="url(#ap-arrow)"/>
+  <text x="44" y="474" class="mono tiny muted">your tap → the hook returns → the harness continues, or is told no</text>
+</svg>

@@ -1,0 +1,56 @@
+<svg class="schematic isolation-diagram" viewBox="0 0 760 346" role="img" aria-labelledby="iso-title iso-desc">
+  <title id="iso-title">Where a run executes</title>
+  <desc id="iso-desc">Three isolation levels: worktree, the agent as your user in its own branch; container, a Docker container per run with a read-only root and an egress allow list enforced by a proxy; openshell, a policy sandbox, experimental.</desc>
+  <defs>
+    <marker id="iso-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+  </defs>
+  <!-- worktree -->
+  <g transform="translate(16 40)">
+    <rect width="220" height="200" rx="14" class="box"/>
+    <text x="16" y="28" class="title">worktree</text>
+    <text x="16" y="48" class="mono small muted">default · your user</text>
+    <g transform="translate(16 68)">
+      <rect width="188" height="110" rx="10" class="inner"/>
+      <text x="14" y="26" class="mono small"><tspan class="accent">⎇ shiioo/1a2b</tspan></text>
+      <text x="14" y="50" class="mono small muted">own branch, own directory</text>
+      <text x="14" y="70" class="mono small muted">your files · your network</text>
+      <text x="14" y="94" class="mono small"><tspan class="muted">walls:</tspan> <tspan class="warn">rules + approvals</tspan></text>
+    </g>
+  </g>
+  <!-- container -->
+  <g transform="translate(270 40)">
+    <rect width="220" height="200" rx="14" class="box accent-border"/>
+    <text x="16" y="28" class="title">container</text>
+    <text x="16" y="48" class="mono small muted">docker per run</text>
+    <g transform="translate(16 68)">
+      <rect width="188" height="110" rx="10" class="inner"/>
+      <text x="14" y="24" class="mono small muted">read-only root · no caps</text>
+      <text x="14" y="44" class="mono small muted">only the worktree mounted</text>
+      <text x="14" y="64" class="mono small muted">home kept for resumes</text>
+      <rect x="8" y="76" width="172" height="22" rx="6" class="lane ok-lane"/>
+      <text x="16" y="91" class="mono small"><tspan class="ok">egress</tspan><tspan class="muted">: proxy allow list</tspan></text>
+    </g>
+  </g>
+  <!-- openshell -->
+  <g transform="translate(524 40)">
+    <rect width="220" height="200" rx="14" class="box dashed"/>
+    <text x="16" y="28" class="title">openshell</text>
+    <text x="16" y="48" class="mono small muted">experimental</text>
+    <g transform="translate(16 68)">
+      <rect width="188" height="110" rx="10" class="inner"/>
+      <text x="14" y="26" class="mono small muted">NVIDIA OpenShell sandbox</text>
+      <text x="14" y="46" class="mono small muted">kernel-level policy:</text>
+      <text x="14" y="66" class="mono small muted">files · syscalls · network</text>
+      <text x="14" y="94" class="mono small muted">untested against a gateway</text>
+    </g>
+  </g>
+  <path d="M236 140 h26" class="wire thin" marker-end="url(#iso-arrow)"/>
+  <path d="M490 140 h26" class="wire thin dashed" marker-end="url(#iso-arrow)"/>
+  <!-- egress legend, under the container -->
+  <g transform="translate(270 256)">
+    <text x="0" y="14" class="mono small"><tspan class="ok">✓</tspan> <tspan class="muted">api.anthropic.com · github.com · registries</tspan></text>
+    <text x="0" y="34" class="mono small"><tspan class="bad">✗</tspan> <tspan class="muted">evil.example · anything else</tspan></text>
+    <text x="0" y="52" class="mono tiny muted">the office’s own host is always allowed: that is where the hook goes</text>
+  </g>
+  <text x="16" y="334" class="mono tiny muted">set per office, per repository or per run · secrets are references, resolved at start and redacted from the record</text>
+</svg>

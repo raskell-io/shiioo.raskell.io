@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="dark light">
     {%- block meta %}
     {%- if page is defined %}
     {%- set page_title = page.title ~ " · " ~ config.title %}
@@ -32,8 +32,7 @@
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     {%- endblock meta %}
-    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#15171C" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#0A0C10">
     <link rel="icon" href="{{ get_url(path='favicon.ico') }}" sizes="48x48">
     <link rel="icon" href="{{ get_url(path='img/favicon.svg') }}" type="image/svg+xml">
     <link rel="icon" href="{{ get_url(path='favicon.png') }}" type="image/png" sizes="32x32">
@@ -44,12 +43,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
     <link rel="stylesheet" href="{{ get_url(path='style.css', cachebust=true) }}">
     <script>
-        // Apply a stored theme choice before first paint; otherwise follow the system.
+        // Ink by default; paper when chosen. Applied before first paint.
         (function () {
             try {
                 var t = localStorage.getItem("theme");
-                if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+                if (t === "light") document.documentElement.dataset.theme = "light";
             } catch (e) {}
+            if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion");
         })();
     </script>
 </head>
@@ -130,9 +130,8 @@
             <span>© {{ now() | date(format="%Y") }} raskell.io</span>
             <span>Code Apache-2.0 · site MIT</span>
             <div class="scheme" role="group" aria-label="Colour scheme">
-                <button type="button" data-scheme="system" aria-pressed="true">System</button>
-                <button type="button" data-scheme="light" aria-pressed="false">Light</button>
-                <button type="button" data-scheme="dark" aria-pressed="false">Dark</button>
+                <button type="button" data-scheme="dark" aria-pressed="true">Ink</button>
+                <button type="button" data-scheme="light" aria-pressed="false">Paper</button>
             </div>
         </div>
     </footer>
@@ -148,17 +147,16 @@
         });
         function setScheme(v) {
             var root = document.documentElement;
-            try { if (v === "system") localStorage.removeItem("theme"); else localStorage.setItem("theme", v); } catch (e) {}
-            if (v === "system") delete root.dataset.theme; else root.dataset.theme = v;
+            try { if (v === "light") localStorage.setItem("theme", "light"); else localStorage.removeItem("theme"); } catch (e) {}
+            if (v === "light") root.dataset.theme = "light"; else delete root.dataset.theme;
             paintScheme();
         }
         function paintScheme() {
-            var cur = document.documentElement.dataset.theme || "system";
+            var cur = document.documentElement.dataset.theme === "light" ? "light" : "dark";
             document.querySelectorAll(".scheme button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.scheme === cur)); });
         }
         function toggleTheme() {
-            var current = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-            setScheme(current === "dark" ? "light" : "dark");
+            setScheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
         }
         document.querySelectorAll(".scheme button").forEach(function (b) { b.addEventListener("click", function () { setScheme(b.dataset.scheme); }); });
         paintScheme();

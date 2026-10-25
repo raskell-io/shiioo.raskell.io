@@ -1,0 +1,40 @@
+<svg class="schematic machines-diagram" viewBox="0 0 760 240" role="img" aria-labelledby="mach-title mach-desc">
+  <title id="mach-title">Other machines work for the office</title>
+  <desc id="mach-desc">A node enrolls once, then dials out to the office over Tailscale, takes the runs addressed to it, works in its own clone, and appends to the office's record. Nothing listens anywhere but the office.</desc>
+  <defs>
+    <marker id="m-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+  </defs>
+  <!-- office -->
+  <g transform="translate(270 60)">
+    <rect width="220" height="120" rx="14" class="box accent-border"/>
+    <text x="16" y="28" class="title">the office</text>
+    <text x="16" y="50" class="mono small muted">the record · rules · api</text>
+    <text x="16" y="70" class="mono small muted">mac.tailnet.ts.net</text>
+    <image href="/img/mascot.png" x="166" y="58" width="42" height="42" class="pixel"/>
+    <text x="16" y="104" class="mono small"><tspan class="accent">/run on:spark</tspan> <tspan class="muted">train it</tspan></text>
+  </g>
+  <!-- spark -->
+  <g transform="translate(16 48)">
+    <rect width="190" height="144" rx="14" class="box"/>
+    <text x="16" y="28" class="title">spark · node</text>
+    <text x="16" y="50" class="mono small muted">gpu=true · os=linux</text>
+    <text x="16" y="74" class="mono small muted">own clone, own worktree</text>
+    <text x="16" y="94" class="mono small muted">own secrets, own docker</text>
+    <text x="16" y="124" class="mono small"><tspan class="ok">●</tspan> <tspan class="muted">online · heartbeat 25 s</tspan></text>
+  </g>
+  <!-- linux box -->
+  <g transform="translate(554 48)">
+    <rect width="190" height="144" rx="14" class="box"/>
+    <text x="16" y="28" class="title">linux-box · node</text>
+    <text x="16" y="50" class="mono small muted">docker=true</text>
+    <text x="16" y="74" class="mono small muted">enrolled with a one-time</text>
+    <text x="16" y="94" class="mono small muted">token from /enroll</text>
+    <text x="16" y="124" class="mono small"><tspan class="muted">⚪ last seen 2h ago</tspan></text>
+  </g>
+  <!-- dial out arrows: nodes -> office -->
+  <path d="M206 120 C 236 120, 240 120, 270 120" class="wire flow a" marker-end="url(#m-arrow)"/>
+  <path d="M554 120 C 524 120, 520 120, 490 120" class="wire flow a dashed" marker-end="url(#m-arrow)"/>
+  <text x="238" y="108" class="mono tiny muted" text-anchor="middle">dials out</text>
+  <text x="522" y="108" class="mono tiny muted" text-anchor="middle">dials out</text>
+  <text x="380" y="212" class="mono tiny muted" text-anchor="middle">lease → append → read: the same worker code, over HTTP, fencing intact · no inbound ports anywhere</text>
+</svg>

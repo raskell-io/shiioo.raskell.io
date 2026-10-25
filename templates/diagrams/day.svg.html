@@ -1,0 +1,61 @@
+<svg class="schematic day-diagram" viewBox="0 0 940 250" role="img" aria-labelledby="day-title day-desc">
+  <title id="day-title">A day at the office</title>
+  <desc id="day-desc">The morning report arrives at seven. You ask for a plan on the way to work, approve it, and the office turns it into issues and runs. Results, files and a mail approval reach your phone through the day; a routine runs the tests at night.</desc>
+  <!-- track -->
+  <path d="M24 60 H916" class="rule-line"/>
+  <g class="playhead"><rect x="24" y="36" width="2" height="190" class="head"/></g>
+  <!-- clock -->
+  <g class="tick-row mono tiny muted">
+    <text x="30" y="28">07:00</text><text x="165" y="28">08:10</text><text x="300" y="28">08:40</text><text x="450" y="28">12:30</text><text x="580" y="28">15:10</text><text x="710" y="28">18:00</text><text x="840" y="28">02:00</text>
+  </g>
+  <!-- moments -->
+  <g class="moment" transform="translate(30 60)">
+    <circle r="6" class="dot"/>
+    <text x="0" y="30" class="title small">📋 report</text>
+    <text x="0" y="48" class="mono tiny muted">3 done · 1 needs you</text>
+    <text x="0" y="62" class="mono tiny muted">2 branches to review</text>
+  </g>
+  <g class="moment" transform="translate(165 60)">
+    <circle r="6" class="dot"/>
+    <text x="0" y="30" class="title small">/plan ship v0.3</text>
+    <text x="0" y="48" class="mono tiny muted">chief of staff reads</text>
+    <text x="0" y="62" class="mono tiny muted">the repo, proposes 5</text>
+  </g>
+  <g class="moment" transform="translate(300 60)">
+    <circle r="6" class="dot accent"/>
+    <text x="0" y="30" class="title small">/plan approve</text>
+    <text x="0" y="48" class="mono tiny muted">5 issues · intake picks</text>
+    <text x="0" y="62" class="mono tiny muted">them up, a branch each</text>
+  </g>
+  <!-- run lanes -->
+  <g class="lanes" transform="translate(300 136)">
+    <rect x="0" y="0" width="150" height="14" rx="7" class="lane-bar a"/>
+    <text x="156" y="11" class="mono tiny muted">codex · #41</text>
+    <rect x="18" y="22" width="180" height="14" rx="7" class="lane-bar b"/>
+    <text x="204" y="33" class="mono tiny muted">claude · #42 → PR</text>
+    <rect x="40" y="44" width="120" height="14" rx="7" class="lane-bar a"/>
+    <text x="166" y="55" class="mono tiny muted">codex on spark · #43</text>
+  </g>
+  <g class="moment" transform="translate(450 60)">
+    <circle r="6" class="dot ok"/>
+    <text x="0" y="30" class="title small">✅ PR #42 up</text>
+    <text x="0" y="48" class="mono tiny muted">review from the couch</text>
+  </g>
+  <g class="moment" transform="translate(580 60)">
+    <circle r="6" class="dot ok"/>
+    <text x="0" y="30" class="title small">🖼 cover.png</text>
+    <text x="0" y="48" class="mono tiny muted">sent to your phone</text>
+  </g>
+  <g class="moment" transform="translate(710 60)">
+    <circle r="6" class="dot warn"/>
+    <text x="0" y="30" class="title small">✉ mail.send?</text>
+    <text x="0" y="48" class="mono tiny muted">to ada: weekly report</text>
+    <text x="0" y="62" class="mono tiny muted">[allow] → sent</text>
+  </g>
+  <g class="moment" transform="translate(840 60)">
+    <circle r="6" class="dot"/>
+    <text x="0" y="30" class="title small">⏰ nightly</text>
+    <text x="0" y="48" class="mono tiny muted">routine: tests</text>
+  </g>
+  <text x="30" y="236" class="mono tiny muted">every step on the record · nothing left the machine without a rule or a tap</text>
+</svg>
