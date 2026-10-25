@@ -33,7 +33,7 @@ Today the office is one process: the server and the only node are the same binar
 The office runs end to end today: the kernel with leases, fencing and recovery; the redb store with a conformance suite shared with an in-memory backend and a Postgres backend; the worker loop with the Claude Code and Codex drivers and the native loop for Anthropic and OpenAI-compatible providers; the rules with the hook that gates every harness command; the HTTP API with a resumable event stream, approvals, capacity and employees; the mobile dashboard; the Telegram bot; the GitHub issue intake; the launchd service with keep-awake; the simulator. Every section of the design documents is marked *(built)*, *(planned)* or *(deferred, ADR-n)*.
 
 <figure class="figure diagram">
-{% include "diagrams/roadmap.svg.html" %}
+<!-- diagram:roadmap -->
 <figcaption>Seven phases: six built, the seventh a requirements draft.</figcaption>
 </figure>
 

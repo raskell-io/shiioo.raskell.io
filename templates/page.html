@@ -18,7 +18,15 @@
     </nav>
     {%- endif %}
     <div class="prose">
-        {{ page.content | safe }}
+        {#- Diagrams are drawn in templates/diagrams/ and spliced in where the
+            markdown says <!-- diagram:name -->. load_data + replace works on
+            every Zola version, unlike includes inside content. -#}
+        {%- set_global body = page.content %}
+        {%- for name in ["office", "chain", "approval", "isolation", "day", "machines", "roadmap"] %}
+            {%- set svg = load_data(path="templates/diagrams/" ~ name ~ ".svg.html", format="plain") %}
+            {%- set_global body = body | replace(from="<!-- diagram:" ~ name ~ " -->", to=svg) %}
+        {%- endfor %}
+        {{ body | safe }}
     </div>
     {%- if page.extra.next %}
     <nav class="next-page" aria-label="Next">

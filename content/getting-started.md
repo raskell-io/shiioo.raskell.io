@@ -17,7 +17,7 @@ next = { title = "How it works", url = "/how-it-works/" }
 - **Rust** (`cargo`), to build the binary. There are no releases yet.
 
 <figure class="figure diagram">
-{% include "diagrams/office.svg.html" %}
+<!-- diagram:office -->
 <figcaption>What you are setting up: the office on the Mac, your phone on Telegram, the agents in their own branches.</figcaption>
 </figure>
 
