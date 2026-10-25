@@ -202,6 +202,7 @@ h3 { font-size: 1.25rem; font-variation-settings: "opsz" 24; }
 .codebox pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: var(--radius); padding: 20px 22px; overflow-x: auto; font-size: 0.95rem; line-height: 1.7; }
 .copy { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.08); color: var(--code-fg); border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 4px 10px; font: 500 0.8rem var(--font-body); cursor: pointer; }
 .codebox-note { color: var(--muted); margin: 1rem 0 0; }
+.codebox-note a { white-space: nowrap; }
 
 // CTA
 .cta { padding: clamp(48px, 7vw, 96px) 0; text-align: center; background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%); }
