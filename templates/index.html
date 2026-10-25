@@ -48,7 +48,7 @@
             </article>
             <article class="card">
                 <h3>Rules first, you second</h3>
-                <p><code>rules.toml</code> says what agents may do without asking: allow, ask or deny per tool, command, path and repo. Before every tool call the harness asks Shiioo. Most calls are decided at once; the rest wait for your tap. A dead server means deny, never an unguarded agent.</p>
+                <p><code>rules.toml</code> says what agents may do without asking: allow, ask or deny per tool, command, path and repo. Before every tool call the harness asks Shiioo. Most calls are decided at once; the rest wait for your tap. A dead server means deny, never an unguarded agent. At the <code>container</code> level the agent also can't reach hosts you haven't allowed.</p>
             </article>
             <article class="card">
                 <h3>Your phone is the interface</h3>
@@ -101,7 +101,7 @@
             </div>
             <div>
                 <h3>Codex</h3>
-                <p>Driven through <code>codex exec --json</code> with the same approval hook: before each command Codex asks Shiioo, and your rules or your tap decide. Its own OS sandbox is off, because headless Codex can't ask you and its sandbox would block every commit; the hook is the sandbox.</p>
+                <p>Driven through <code>codex exec --json</code> with the same approval hook: before each command Codex asks Shiioo, and your rules or your tap decide. Its own OS sandbox is off, because headless Codex can't ask you and its sandbox would block every commit; the hook is the gate, and the <code>container</code> level is the sandbox.</p>
             </div>
             <div>
                 <h3>Local models</h3>
@@ -124,11 +124,12 @@
                 <tr><td>Telegram bot and mobile dashboard</td><td class="built">built; bot tested against a fake server, dashboard in a browser</td></tr>
                 <tr><td><code>shiioo install</code>: login service, keep-awake</td><td class="built">built on macOS; Linux unit untested</td></tr>
                 <tr><td>Capacity broker, local models, GitHub-issue intake</td><td class="built">built; untested against a live Ollama</td></tr>
-                <tr><td>OS isolation levels, secrets injection, egress rules</td><td class="planned">planned, phase 4</td></tr>
+                <tr><td><code>container</code> isolation: Docker per run, read-only root, only the worktree mounted, egress through an allow list; encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
+                <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
                 <tr><td>Planner and routines, remote nodes, asset and mail work, fork and replay</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
-        <p class="status-note">Today an agent runs with your user's permissions and no OS sandbox; the rules and your approvals are what stand between it and your machine. Use it on repositories you don't mind it changing until phase 4 lands.</p>
+        <p class="status-note">By default an agent runs as your user in its worktree, with no OS sandbox; the rules and your approvals are what stand between it and your machine. Set <code>[isolation] default = "container"</code> and each run gets a Docker container with only its worktree mounted and only the hosts you allow reachable; <code>shiioo secret set</code> keeps the tokens it needs out of the record.</p>
     </div>
 </section>
 

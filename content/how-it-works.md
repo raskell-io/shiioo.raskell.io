@@ -82,6 +82,7 @@ What each harness is given:
 | Removed from its environment | `ANTHROPIC_API_KEY` and the parent session's `CLAUDE*` variables | `OPENAI_API_KEY`, `CODEX_API_KEY` |
 | Its own permission prompts | `--permission-mode default` with the hook, `acceptEdits` without | `approval_policy=never` |
 | Its own sandbox | None in this mode | Off (`danger-full-access`) by default |
+| Isolation level | `worktree` or `container`, per office, repository or run | The same |
 | Budgets | `--max-turns`, `--max-minutes`; `--max-budget-usd` with API billing | `--max-minutes` only |
 | Capacity windows | Reported in the stream | Not available in `exec` |
 
@@ -91,7 +92,7 @@ Each run on a repository gets its own git worktree and a `shiioo/<run>` branch, 
 
 ## Rules and approvals
 
-Before every tool call, the harness runs `shiioo hook pre-tool-use`, a hook both Claude Code and Codex support. The hook posts the planned call to the office. The office judges it against `rules.toml`: `allow` and `deny` answer at once, with the rule's reason; `ask` records an approval request, sends it to your phone, and holds the hook's request open until you answer or six hours pass. The hook then prints the decision and the harness proceeds or refuses the call, telling the model why.
+Before every tool call, the harness runs `shiioo hook pre-tool-use` (inside a container, a `curl` call to the same office), a hook both Claude Code and Codex support. The hook posts the planned call to the office. The office judges it against `rules.toml`: `allow` and `deny` answer at once, with the rule's reason; `ask` records an approval request, sends it to your phone, and holds the hook's request open until you answer or six hours pass. The hook then prints the decision and the harness proceeds or refuses the call, telling the model why.
 
 The hook fails closed. If the office is unreachable, the hook denies. A dead server never means an unguarded agent.
 
@@ -104,6 +105,17 @@ Bash: git push origin shiioo/2fc85b3f
 ```
 
 In the dashboard it is a card on the run's page with the same two buttons. The decision, by whom and when, is an event in the run's log; an unanswered request expires as `deny by timeout`.
+
+## Isolation and secrets
+
+Where a run executes is a setting of the office, of a repository or of one run, and every run records it as its first step after the lease (`isolation: container (shiioo-0fd1bd4e, egress allowlist)`).
+
+- **`worktree`**, the default: the harness runs as your user in the run's worktree, with your files and network. The rules and your approvals are the whole defence.
+- **`container`**: the harness runs in a Docker (or Podman) container per run, through the engine you already have. Read-only root filesystem, no capabilities, `no-new-privileges`, a pid limit, optional CPU and memory limits. Only the run's worktree and the repository's `.git` are mounted, at their host paths, so the worktree's `.git` pointer resolves and commits land on the run's branch exactly as at `worktree`. A home directory per run under `.shiioo/sandboxes/` is kept, so a crashed run resumes the same Claude Code or Codex session inside a fresh container. The image is built on first use from a Dockerfile embedded in the binary: Node, git, the GitHub CLI, the build tools, Claude Code and Codex. Codex logs in with your `auth.json` mounted read-only; Claude Code needs a token from `claude setup-token`, stored as the secret `claude-code-oauth-token`, because its keychain login cannot cross into a container.
+- **Egress** for container runs is an allow list, enforced at the network layer rather than by asking nicely: the container joins an internal network with no route out, and a small proxy per run on that network and the default bridge forwards TLS tunnels (port 443) and plain HTTP only to the host patterns you allow. The default list is the model providers, GitHub and the package registries of the common toolchains. A program that ignores `HTTPS_PROXY` cannot connect at all. The office's own host is always allowed, so the permission hook works from inside; it is a `curl` call there, because the `shiioo` binary is not in the container.
+- **`openshell`**: an adapter over NVIDIA OpenShell's CLI that creates a sandbox with a network policy generated from the same egress rules, uploads the worktree, runs the harness with `sandbox exec` and deletes the sandbox afterwards. Experimental: written against the documentation, not yet run against a gateway.
+
+Secrets are named, not pasted. `shiioo secret set gh-token` stores a value encrypted in `.shiioo/` (XChaCha20-Poly1305 under a local key, both files mode 0600); `[env] GH_TOKEN = "secret:gh-token"` in `config.toml` hands it to every harness run. The run's spec, and so its log, holds the reference. Before anything is recorded, every string is scanned for the known values, raw, base64 and URL-encoded, and each occurrence becomes `[secret:gh-token]`, followed by an event that names the secret and counts the occurrences; the office's own API token is treated the same way. What this does not do: hide the value from the agent itself, which runs its own tools and can read its environment. Redaction protects the record, the phone and the dashboard.
 
 ## Capacity
 

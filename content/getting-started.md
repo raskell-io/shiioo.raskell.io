@@ -176,6 +176,8 @@ shiioo --workspace ~/shiioo-office resume <run-id>     # after Ctrl-C or kill -9
 | `worktrees/<run>/` | One git worktree per repository run, branch `shiioo/<8 characters>`. Branches stay in your repository after the run. |
 | `config.toml`, `rules.toml` | Above. |
 | `api-token`, `telegram-token` | Bearer token for the API and dashboard; the bot token. Mode 0600. |
+| `sandboxes/<run>/` | For `container` runs: the run's home directory (kept for resumes), its egress proxy configuration. |
+| `secrets.key`, `secrets.enc` | The encrypted secret store (`shiioo secret`). Mode 0600. |
 | `intake-state.json` | Which GitHub issues were already picked up. |
 | `logs/serve.log` | The service's output. |
 
@@ -189,9 +191,49 @@ launchctl kickstart -k gui/$(id -u)/io.raskell.shiioo      # restart (after edit
 
 Runs survive restarts: a worker that comes back reads the log and continues, and resumes the same Claude Code or Codex session. To upgrade, build the new binary and restart; if its path changed, `shiioo uninstall` and `install` again.
 
+## Running agents in containers
+
+By default a harness runs as your user, in its worktree, with your network: the `worktree` level. For unattended work, switch the office or a repository to the `container` level. It needs Docker running on the Mac (colima works) and the office and its repositories under your home directory, which is what Docker's VM can see.
+
+```toml
+[isolation]
+default = "container"           # or per repository: [isolation.repos] myproject = "container"
+
+[isolation.container]
+memory = "8g"
+cpus = 4.0
+
+[egress]
+mode = "allowlist"              # the model APIs, GitHub and the package registries; add with `also = [...]`
+```
+
+Each run then gets its own container: a read-only root filesystem, no capabilities, only the run's worktree and the repository's `.git` mounted (at their host paths, so commits land on the run's branch as before), a home directory of its own that survives resumes, and a network whose only way out is a proxy that admits TLS to the hosts on the list. `shiioo sandbox build` builds the image ahead of time (it takes a few minutes; otherwise the first run does it).
+
+Codex logs in with the `auth.json` from your `codex login`, mounted read-only. Claude Code's login lives in the macOS keychain, which a container cannot read, so give it a token once:
+
+```sh
+claude setup-token                                   # prints a long-lived token for your subscription
+shiioo --workspace ~/shiioo-office secret set claude-code-oauth-token     # paste it on stdin
+```
+
+Anything else an agent needs, such as a GitHub token for `gh` and pushes over HTTPS (the container has no SSH keys), goes the same way and is referenced by name:
+
+```sh
+echo -n ghp_… | shiioo --workspace ~/shiioo-office secret set gh-token
+```
+
+```toml
+[env]
+GH_TOKEN = "secret:gh-token"
+```
+
+The value reaches the harness and nothing else: the run's record holds the reference, and if the agent ever prints the value, the log, the phone and the dashboard show `[secret:gh-token]` instead, with an event saying a secret was redacted. Every run records where it executed (`isolation: container (shiioo-0fd1bd4e, egress allowlist)`).
+
 ## Caveats, honestly
 
-- **No OS sandbox yet.** A harness runs with your user's permissions. The rules and your approvals are what stand between an agent and your machine; isolation levels are the next phase. Use repositories and directories you don't mind an agent changing.
+- **`worktree` has no OS sandbox.** At the default level a harness runs with your user's permissions; the rules and your approvals are what stand between an agent and your machine. Use the `container` level for anything you would not run as yourself. A container is not a VM: it bounds mistakes and persuasion, not a kernel exploit, and the agent can still read the secrets it was given.
+- **`openshell` is experimental.** The adapter follows NVIDIA OpenShell's documentation and has not been run against a gateway yet; it works on an uploaded copy of the worktree, so results come back through git.
+- **Sandboxed runs reach the network over TLS on 443 and plain HTTP only.** No SSH, no other ports; GitHub remotes are rewritten to HTTPS inside the container.
 - **Codex's own sandbox is off** by default, because headless Codex cannot ask for an exception and its workspace sandbox blocks `git commit`. Codex also ignores `--max-turns` and `--max-budget-usd`; `--max-minutes` is the budget that applies to both harnesses.
 - **Approvals don't survive a server restart.** The request is in the log, but the harness that was waiting sees a denial after its own timeout (about six hours).
 - **Telegram and local models** have been tested against fakes, not yet against a real bot or a running Ollama.

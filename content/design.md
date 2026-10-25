@@ -1,6 +1,6 @@
 +++
 title = "Design"
-description = "The principles, what is built and what is planned, and a map of the documentation: the design documents, the ten architecture decisions, and where each part lives in the code."
+description = "The principles, what is built and what is planned, and a map of the documentation: the design documents, the eleven architecture decisions, and where each part lives in the code."
 [extra]
 eyebrow = "Reference"
 toc = true
@@ -24,7 +24,7 @@ Today the office is one process: the server and the only node are the same binar
 | Server | One process; redb; loopback API; Tailscale for the phone | Unchanged |
 | Nodes | The one inside the server process | Remote nodes that dial out over WebSocket and run agents for the office, so a Spark or a second Mac can join |
 | Store | redb | A Postgres backend exists and passes the same conformance suite; a cluster no longer requires it (ADR-0003's cluster part is superseded by ADR-0010) |
-| Isolation | The owner's user account, gated by the rules and approvals | Isolation levels per run |
+| Isolation | `worktree` (the owner's user, gated by the rules) or `container` (Docker per run, read-only root, egress allow list), chosen per office, repository or run | `openshell` sandboxes (experimental adapter exists), workspace snapshots |
 | Policy | `rules.toml`: first match wins, default ask | Cedar policies and Biscuit credentials |
 
 ## What exists
@@ -35,8 +35,9 @@ Planned, and not yet started:
 
 | Area | State |
 |---|---|
-| Isolation levels for harness runs (OS sandbox, snapshots) | Planned, next phase. Today a harness runs with the owner's permissions, gated by the rules. |
+| `openshell` isolation, workspace snapshots | The `container` level, egress allow lists and the encrypted secret store with redaction are built ([ADR-0011](https://github.com/raskell-io/shiioo/blob/main/docs/adr/0011-containers-through-the-owners-engine.md)). `openshell` is an experimental adapter not yet run against a gateway; snapshots are designed, not built. |
 | Remote nodes that dial out over WebSocket, so a Spark or a second Mac can run agents for the office | Decided ([ADR-0006](https://github.com/raskell-io/shiioo/blob/main/docs/adr/0006-daemon-dials-out-over-websocket.md), [ADR-0010](https://github.com/raskell-io/shiioo/blob/main/docs/adr/0010-single-binary-server-and-nodes.md)), not built. The only node is the one inside the process. |
+| [0011](https://github.com/raskell-io/shiioo/blob/main/docs/adr/0011-containers-through-the-owners-engine.md) | Agents run in containers through the owner's Docker or Podman; egress through a proxy sidecar; secrets sealed locally and redacted from the record. |
 | Cedar policies and Biscuit credentials | Decided ([ADR-0005](https://github.com/raskell-io/shiioo/blob/main/docs/adr/0005-cedar-policies-and-biscuit-credentials.md)), not built. Today's rules are the TOML file. |
 | ACP (Agent Client Protocol) as a third harness interface | Planned. |
 | Fork, rewind, replay and evals over recorded runs | Designed, not built. |
