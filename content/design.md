@@ -26,6 +26,7 @@ Today the office is one process: the server and the only node are the same binar
 | Store | redb | A Postgres backend exists and passes the same conformance suite; a cluster no longer requires it (ADR-0003's cluster part is superseded by ADR-0010) |
 | Isolation | `worktree` (the owner's user, gated by the rules) or `container` (Docker per run, read-only root, egress allow list), chosen per office, repository or run | `openshell` sandboxes (experimental adapter exists), workspace snapshots |
 | Policy | `rules.toml`: first match wins, default ask | Cedar policies and Biscuit credentials |
+| The company | Roles, routines on a schedule, the morning report, the chief of staff behind `/plan` with approval into issues | Re-planning on strategy changes, a committed roadmap |
 
 ## What exists
 
@@ -41,6 +42,7 @@ Planned, and not yet started:
 | Cedar policies and Biscuit credentials | Decided ([ADR-0005](https://github.com/raskell-io/shiioo/blob/main/docs/adr/0005-cedar-policies-and-biscuit-credentials.md)), not built. Today's rules are the TOML file. |
 | ACP (Agent Client Protocol) as a third harness interface | Planned. |
 | Fork, rewind, replay and evals over recorded runs | Designed, not built. |
+| A committed `ROADMAP.md`, re-planning when strategy documents change, dependencies between plan items | Planned. Today the chief of staff proposes a plan per goal and approval creates independent issues. |
 | Codex capacity windows, approvals that survive a server restart, cancellation mid-command | Known gaps, in the [backlog](https://github.com/raskell-io/shiioo/blob/main/docs/backlog.md). |
 
 ## Documents

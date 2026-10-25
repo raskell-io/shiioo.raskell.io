@@ -129,6 +129,14 @@ Runs can also carry a time budget (`--max-minutes`); Claude Code runs additional
 
 Label an issue `shiioo` in one of your configured repositories and, with `[intake] enabled = true`, the office picks it up on its next poll through the `gh` CLI: it starts a run whose task is the issue's title, body and URL plus standing instructions (work on the branch, commit, push, open a pull request that closes the issue), comments on the issue with the run id and branch, and when the run ends comments with the outcome and swaps the label to `shiioo:done` or `shiioo:failed`. Issue text is untrusted input handed to an agent; the rules and your approvals still gate every command it tries.
 
+## The company
+
+Three pieces turn single runs into a staff that keeps working, all built from the primitives above.
+
+- **Roles** (`[[roles]]`) are agent configurations the owner names with `@`: an employee or the broker's choice, instructions, a tool allow list, a model, an isolation level and limits, laid over the employee's defaults for that run.
+- **Routines** (`[[routines]]`) start runs on a schedule written the way one would say it: `hourly`, `every 6h`, `daily 02:00`, `weekdays 07:00`, `mon,thu 09:30`. A scheduler in the server checks every thirty seconds what is due; what fired is kept in `.shiioo/routines-state.json`, so a restart neither fires a routine twice nor backfills what was missed while the office was down. The **morning report** is scheduled the same way and counted from the record and the repositories: runs finished, failed or needing the owner since the last report, approvals waiting, `shiioo/*` branches with unmerged commits, capacity left, the next routines.
+- **The chief of staff** is a planning run. `/plan <repo> <goal>` starts a harness in the repository with read-only tools and instructions to study the project and answer with one to twelve work items as JSON. The office parses the answer into a plan (`.shiioo/plans.json`) and sends it to the phone; `/plan approve <id>` creates one GitHub issue per item carrying the intake's label, in order, and the intake works them. The planner changes nothing and needs no approvals; the owner's approval is the plan's. A plan the office cannot read fails with the planner's words, never with a guess.
+
 ## The office
 
 The office is one Rust binary with an embedded database (redb), running as one process on your machine. It is the server (the record, the rules and approvals, the capacity tracker, the HTTP API with a resumable event stream, the mobile dashboard, the Telegram bot, the workers) and the node that runs the agents. No Postgres, no containers. Remote nodes that dial out to the server are planned; today the only node is the one inside the process.

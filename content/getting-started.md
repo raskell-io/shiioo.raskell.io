@@ -129,6 +129,10 @@ Open the dashboard link `install` printed on your phone once, with the `#token=â
 | `/cancel <run>` | Stops the run at its next step. |
 | `/capacity` | How much of each subscription's five-hour and seven-day window is used, and when it resets. |
 | `/repos` | The labels you can name in `/run`. |
+| `/run @reviewer shiioo check PR 12` | The same, as the role `reviewer` from `[[roles]]`. `/roles` lists them. |
+| `/plan shiioo ship v0.3 this week` | The chief of staff reads the repo and proposes work items; `/plan approve <id>` turns them into issues the intake works through. |
+| `/report` | The morning report, now. |
+| `/routines`, `/routine <name>` | Scheduled work and when it fires next; fire one now. |
 | `/approve <id>`, `/deny <id>` | Answer a request without the buttons. |
 | `/help` | The list. |
 
@@ -190,6 +194,59 @@ launchctl kickstart -k gui/$(id -u)/io.raskell.shiioo      # restart (after edit
 ```
 
 Runs survive restarts: a worker that comes back reads the log and continues, and resumes the same Claude Code or Codex session. To upgrade, build the new binary and restart; if its path changed, `shiioo uninstall` and `install` again.
+
+## Running the company
+
+Three things turn a bot that takes orders into a staff that keeps working.
+
+**Roles** are reusable configurations in `config.toml`; name one with `@` in `/run`:
+
+```toml
+[[roles]]
+name = "reviewer"
+employee = "auto"
+system = "You review code and write your findings to REVIEW.md. Never push."
+tools = ["Read", "Glob", "Grep", "Bash(git *)", "Write"]
+isolation = "container"
+max_minutes = 30
+```
+
+**Routines** start runs on their own. The schedule is in your words, in the Mac's local time:
+
+```toml
+[[routines]]
+name = "nightly-tests"
+schedule = "daily 02:00"           # hourly, every 6h, weekdays 07:00, weekends 10:00, mon,thu 09:30
+repo = "shiioo"
+role = "tester"
+task = "Run the full test suite; fix any flaky test you find and open a PR."
+
+[report]
+schedule = "weekdays 07:00"
+```
+
+The report arrives on Telegram at that time: what finished, failed or needs you since the last one, approvals waiting, `shiioo/*` branches with commits you haven't merged, how much of the week's capacity is left, and what fires next. It is counted from the record, not written by a model. A routine that was due while the office was off is not fired late; the next one is.
+
+**The chief of staff** is `/plan`:
+
+```text
+/plan shiioo prepare the first tagged release, v0.1.0
+```
+
+A read-only run studies the repository and answers with a plan; a few minutes later the bot shows the items:
+
+```text
+ðŸ“‹ plan 3f9c2a1b for shiioo: prepare the first tagged release, v0.1.0
+Keep the release mechanical; the changelog comes from the git log.
+1. Write CHANGELOG.md for v0.1.0
+2. Add a release checklist to docs/
+3. Bump the workspace version and tag
+4. Build macOS binaries in a release workflow
+
+/plan approve 3f9c2a1b creates 4 issue(s) for the office to work on; /plan show 3f9c2a1b prints the details.
+```
+
+Approving creates one GitHub issue per item, labelled `shiioo`, and the intake (`[intake] enabled = true`) runs them one after another, each on its own branch with a pull request at the end. The planner changes nothing and asks for nothing; your approval is the plan's.
 
 ## Running agents in containers
 

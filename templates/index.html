@@ -52,7 +52,7 @@
             </article>
             <article class="card">
                 <h3>Your phone is the interface</h3>
-                <p>Telegram to delegate, approve and be told when something finished or needs you. A mobile dashboard over Tailscale for the live log, the diff and the buttons. No public address anywhere: the bot long-polls, the dashboard sits on your tailnet.</p>
+                <p>Telegram to delegate, approve and be told when something finished or needs you; <code>/plan</code> to hand a goal to the chief of staff, <code>/report</code> for the morning report. A mobile dashboard over Tailscale for the live log, the diff and the buttons. No public address anywhere: the bot long-polls, the dashboard sits on your tailnet.</p>
             </article>
         </div>
     </div>
@@ -126,7 +126,8 @@
                 <tr><td>Capacity broker, local models, GitHub-issue intake</td><td class="built">built; untested against a live Ollama</td></tr>
                 <tr><td><code>container</code> isolation: Docker per run, read-only root, only the worktree mounted, egress through an allow list; encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
                 <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
-                <tr><td>Planner and routines, remote nodes, asset and mail work, fork and replay</td><td class="planned">planned</td></tr>
+                <tr><td>The company: <code>/plan</code> (a chief-of-staff run whose approval becomes issues), routines on a typed schedule, the morning report, roles</td><td class="built">built, planner verified live</td></tr>
+                <tr><td>Remote nodes, asset and mail work, fork and replay</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
         <p class="status-note">By default an agent runs as your user in its worktree, with no OS sandbox; the rules and your approvals are what stand between it and your machine. Set <code>[isolation] default = "container"</code> and each run gets a Docker container with only its worktree mounted and only the hosts you allow reachable; <code>shiioo secret set</code> keeps the tokens it needs out of the record.</p>
