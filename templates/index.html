@@ -40,7 +40,7 @@
             </article>
             <article class="card">
                 <h3>The office is one binary</h3>
-                <p><code>shiioo</code> is the server (the record, the rules, the API and dashboard, the Telegram bot, the workers) and the node that runs the agents, in one process on your machine. Its data is one directory with an embedded database. No Postgres, no containers.</p>
+                <p><code>shiioo</code> is the server (the record, the rules, the API and dashboard, the Telegram bot, the workers) and the node that runs the agents, in one process on your machine. Its data is one directory with an embedded database. No Postgres, no containers. Another machine joins with <code>shiioo node</code> and works against the same record.</p>
             </article>
             <article class="card">
                 <h3>The record is the only state</h3>
@@ -127,7 +127,9 @@
                 <tr><td><code>container</code> isolation: Docker per run, read-only root, only the worktree mounted, egress through an allow list; encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
                 <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
                 <tr><td>The company: <code>/plan</code> (a chief-of-staff run whose approval becomes issues), routines on a typed schedule, the morning report, roles</td><td class="built">built, planner verified live</td></tr>
-                <tr><td>Remote nodes, asset and mail work, fork and replay</td><td class="planned">planned</td></tr>
+                <tr><td>Remote nodes: another machine runs <code>shiioo node</code> and takes the runs addressed to it, against the office's log over HTTP</td><td class="built">built, verified live with a node process</td></tr>
+                <tr><td>Deliverables sent to the phone (<code>/files</code>, <code>/get</code>) and mail with send-approval</td><td class="built">built, end to end over HTTP</td></tr>
+                <tr><td>Fork and replay, a node login service, mail reading</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
         <p class="status-note">By default an agent runs as your user in its worktree, with no OS sandbox; the rules and your approvals are what stand between it and your machine. Set <code>[isolation] default = "container"</code> and each run gets a Docker container with only its worktree mounted and only the hosts you allow reachable; <code>shiioo secret set</code> keeps the tokens it needs out of the record.</p>

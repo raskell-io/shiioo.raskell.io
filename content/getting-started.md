@@ -133,6 +133,8 @@ Open the dashboard link `install` printed on your phone once, with the `#token=â
 | `/plan shiioo ship v0.3 this week` | The chief of staff reads the repo and proposes work items; `/plan approve <id>` turns them into issues the intake works through. |
 | `/report` | The morning report, now. |
 | `/routines`, `/routine <name>` | Scheduled work and when it fires next; fire one now. |
+| `/run on:spark shiioo train the model` | The same, on the enrolled machine `spark` (or a label, `on:gpu=true`). `/machines` lists them. |
+| `/files <run>`, `/get <run> <path>` | The files a run produced; send one to the phone. Images, audio, video and PDFs arrive on their own when a run finishes. |
 | `/approve <id>`, `/deny <id>` | Answer a request without the buttons. |
 | `/help` | The list. |
 
@@ -247,6 +249,36 @@ Keep the release mechanical; the changelog comes from the git log.
 ```
 
 Approving creates one GitHub issue per item, labelled `shiioo`, and the intake (`[intake] enabled = true`) runs them one after another, each on its own branch with a pull request at the end. The planner changes nothing and asks for nothing; your approval is the plan's.
+
+## Adding a machine
+
+A DGX Spark, a second Mac or a Linux box can work for the office. On the office machine, publish the API on your tailnet once (`tailscale serve --bg 7878`) and ask for a token:
+
+```text
+/enroll spark gpu=true
+```
+
+The bot answers with a one-time token and the command to paste on the new machine:
+
+```sh
+shiioo --workspace ~/shiioo-node node enroll --server https://mac-studio.tail1234.ts.net --token <token> --name spark --label gpu=true
+shiioo --workspace ~/shiioo-node node
+```
+
+Put the machine's clones of your repositories in its own `~/shiioo-node/.shiioo/config.toml` under `[repos]`, with the same labels the office uses, and log its harnesses in there. From then on `/run on:spark shiioo train the model` goes to it: the node takes the run, works in its own worktree, asks the office before every command exactly as the office's own workers do, and the record stays in the office. `/machines` shows who is online. Nothing listens on the Spark; it dials out.
+
+## Mail
+
+Give the office a mail account and agents can write to people, with you in between:
+
+```toml
+[mail]
+smtp_host = "smtp.fastmail.com"
+from = "Shiioo <office@example.com>"
+password = "secret:smtp-password"     # shiioo secret set smtp-password
+```
+
+An agent sends with `shiioo mail send --to ada@example.com --subject "Weekly report" --body-file report.md`. The request goes to the office, the rules treat it as `mail.send` and ask you by default, the Allow button sends it from the office's account, and the run's record says `mail sent to ada@example.com: Weekly report`. The agent never sees the password.
 
 ## Running agents in containers
 
