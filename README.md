@@ -41,5 +41,8 @@ phase lands, update the status table on the home page and the pages with it.
 
 ## Deploy
 
-Cloudflare Pages, connected to this repository. Build command `scripts/cf-pages-build.sh`,
-output directory `public`. Every push to `main` deploys.
+Cloudflare Pages project `shiioo-raskell-io` in the raskell.io account, connected to this
+repository. Build command `scripts/cf-pages-build.sh`, output directory `public`. Every push to
+`main` deploys to https://shiioo-raskell-io.pages.dev and the custom domain
+https://shiioo.raskell.io. The Zola version is pinned in the build script and in `mise.toml`;
+bump both together.
