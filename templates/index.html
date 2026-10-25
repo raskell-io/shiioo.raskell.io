@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block body_class %}home{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="wrap hero-grid">
+        <div class="hero-copy">
+            <p class="eyebrow">{{ config.extra.pitch }}</p>
+            <h1>A staff of AI agents on your Mac, run from your phone.</h1>
+            <p class="lead">Shiioo turns the coding agents you already pay for, Claude Code on your Claude plan and Codex on your OpenAI plan, into employees of a small company whose only human is you. You hand out work from Telegram, they work in their own branches, your rules decide what they may do alone, the rest comes to your phone as a question, and everything they did is on the record.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="/getting-started/">Set up the office</a>
+                <a class="btn" href="/how-it-works/">How it works</a>
+            </div>
+            <p class="hero-needs"><span>You need</span> a Mac that stays on · Claude Code or Codex · a Telegram bot · Tailscale</p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="phone">
+                <div class="phone-top"><span class="phone-title">shiioo</span><span class="phone-sub">bot</span></div>
+                <div class="chat">
+                    <div class="msg you"><code>/run sango fix the flaky test in tests/net.rs and open a PR</code></div>
+                    <div class="msg bot">▶️ <b>b619ff8d</b> started on sango (claude): fix the flaky test in tests/net.rs and open a PR<br><span class="dim">branch shiioo/b619ff8d</span></div>
+                    <div class="msg bot ask">🔐 <b>b619ff8d</b> wants to run<br><code>Bash: git push -u origin shiioo/b619ff8d</code>
+                        <div class="keys"><span class="key allow">✅ Allow</span><span class="key deny">⛔ Deny</span></div>
+                    </div>
+                    <div class="msg bot done">✅ <b>b619ff8d</b> finished: fix the flaky test in tests/net.rs and open a PR<br><span class="dim">Opened PR #42 from shiioo/b619ff8d. The retry loop in tests/net.rs waited on a fixed 50 ms; it now polls until the listener is ready.</span></div>
+                </div>
+            </div>
+            <img class="pixel mascot" src="{{ get_url(path='img/mascot.png') }}" alt="" width="256" height="256">
+        </div>
+    </div>
+</section>
+
+<section class="band how">
+    <div class="wrap">
+        <h2>Five ideas, one binary.</h2>
+        <div class="cards">
+            <article class="card">
+                <h3>Employees are harnesses</h3>
+                <p>Claude Code and Codex run headless in a git worktree of your repository, on your subscriptions. Local models through Ollama, LM Studio or an MLX server serve Shiioo's own loop. Each is one <code>[[employees]]</code> entry; a task goes to the first whose subscription window isn't used up.</p>
+            </article>
+            <article class="card">
+                <h3>The office is one binary</h3>
+                <p><code>shiioo</code> is the server (the record, the rules, the API and dashboard, the Telegram bot, the workers) and the node that runs the agents, in one process on your machine. Its data is one directory with an embedded database. No Postgres, no containers.</p>
+            </article>
+            <article class="card">
+                <h3>The record is the only state</h3>
+                <p>Every run is an append-only, hash-chained event log: each model message, tool call, result, rule verdict and approval. Workers hold fenced leases, so a crash, a sleeping laptop or a lost connection means the run resumes from its log, and a side effect never silently happens twice.</p>
+            </article>
+            <article class="card">
+                <h3>Rules first, you second</h3>
+                <p><code>rules.toml</code> says what agents may do without asking: allow, ask or deny per tool, command, path and repo. Before every tool call the harness asks Shiioo. Most calls are decided at once; the rest wait for your tap. A dead server means deny, never an unguarded agent.</p>
+            </article>
+            <article class="card">
+                <h3>Your phone is the interface</h3>
+                <p>Telegram to delegate, approve and be told when something finished or needs you. A mobile dashboard over Tailscale for the live log, the diff and the buttons. No public address anywhere: the bot long-polls, the dashboard sits on your tailnet.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="band band-alt record">
+    <div class="wrap record-grid">
+        <div class="record-copy">
+            <p class="eyebrow">On the record</p>
+            <h2>Everything an agent did, in order, provably.</h2>
+            <p>A run's log is the thing itself, not a report about it. The worker writes what it is about to do before it does it, so a crash at any point leaves a log that says exactly what did and didn't happen. Each event carries its position, the lease epoch it was written under, and the hash of the event before it; change a byte anywhere and verification fails.</p>
+            <ul class="ticks">
+                <li><b>Fenced leases.</b> Only the current lease holder can append. A stalled worker that wakes up after a takeover is refused, and so is the late tool call it tries to send.</li>
+                <li><b>Write before acting.</b> The model's response is recorded before any tool runs; a tool call is recorded as an intent before it is dispatched and as a result after.</li>
+                <li><b>No blind retries.</b> Pure and idempotent calls are re-run after a crash; a side-effecting call whose outcome is unknown stops the run and asks you.</li>
+            </ul>
+        </div>
+        <pre class="log" aria-label="A run's log"><code><span class="n">#0</span>  run created: Append a line to README.md and commit it
+<span class="n">#1</span>  lease acquired by local-70065 (epoch 1)
+<span class="n">#2</span>  claude-code session 91ccb674… (claude-haiku-5-5)
+<span class="n">#4</span>  → Bash {"command":"tail -c 200 README.md | od -c | tail -5 && git status --short"}
+<span class="n">#5</span>  capacity claude-code: 5h 19%, 7d 5% used
+<span class="n">#6</span>  <span class="ask">rules: ask Bash (segment "od -c": default: ask)</span>
+<span class="n">#7</span>  <span class="ask">waiting for approval: Bash: tail -c 200 README.md | od -c | …</span>
+<span class="n">#8</span>  <span class="ok">allow by owner</span>
+<span class="n">#9</span>  ← /Users/me/shiioo-office/.shiioo/worktrees/db2426e0-…
+<span class="n">#12</span> → Bash {"command":"printf 'Dashboard check.\n' >> README.md && git commit -qam …"}
+<span class="n">#13</span> <span class="ok">rules: allow Bash (rule 59 (Bash|shell `printf *`): allow)</span>
+<span class="n">#14</span> ← 5702552 docs: dashboard check  1 file changed, 1 insertion(+)
+<span class="n">#16</span> harness result: success, cost $0.0027, 0 permission denial(s)
+<span class="n">#17</span> <span class="done">completed: Appended the line to README.md, committed as 5702552</span></code></pre>
+    </div>
+</section>
+
+<section class="band staff">
+    <div class="wrap">
+        <div class="staff-head">
+            <p class="eyebrow">The staff</p>
+            <h2>Hire the agents you already have.</h2>
+        </div>
+        <img class="pixel staff-sheet" src="{{ get_url(path='img/staff.png') }}" alt="Sixteen pixel-art portraits of the Shiioo mascot in different moods" width="512" height="512" loading="lazy">
+        <div class="staff-grid">
+            <div>
+                <h3>Claude Code</h3>
+                <p>Driven in its headless print mode, in a worktree of your repo, with the same login you use in the terminal. Every message and tool call is recorded; a crashed worker resumes the very same session. Its five-hour and seven-day windows are read from its output and shown on your phone.</p>
+            </div>
+            <div>
+                <h3>Codex</h3>
+                <p>Driven through <code>codex exec --json</code> with the same approval hook: before each command Codex asks Shiioo, and your rules or your tap decide. Its own OS sandbox is off, because headless Codex can't ask you and its sandbox would block every commit; the hook is the sandbox.</p>
+            </div>
+            <div>
+                <h3>Local models</h3>
+                <p>Shiioo's own agent loop against anything that speaks the OpenAI chat API: Ollama, LM Studio, an MLX server. Name a model <code>ollama/qwen3:32b</code> and it runs on your hardware, for planning, triage and bulk work that shouldn't spend a subscription.</p>
+            </div>
+        </div>
+        <p class="staff-note">Tasks go to the first employee whose windows are under their limits; <code>/capacity</code> shows what is left this week.</p>
+    </div>
+</section>
+
+<section class="band band-alt status">
+    <div class="wrap">
+        <p class="eyebrow">Status</p>
+        <h2>What works today, and what doesn't yet.</h2>
+        <table class="status-table">
+            <tbody>
+                <tr><td>Kernel: event log, hash chain, leases with fencing, crash recovery, embedded store</td><td class="built">built, conformance-tested, plus a seeded crash simulation</td></tr>
+                <tr><td>Claude Code and Codex as employees, worktree per run, resume after a crash</td><td class="built">built, verified with the real binaries</td></tr>
+                <tr><td>Rules, approvals through the harness hook, cancellation</td><td class="built">built, verified live</td></tr>
+                <tr><td>Telegram bot and mobile dashboard</td><td class="built">built; bot tested against a fake server, dashboard in a browser</td></tr>
+                <tr><td><code>shiioo install</code>: login service, keep-awake</td><td class="built">built on macOS; Linux unit untested</td></tr>
+                <tr><td>Capacity broker, local models, GitHub-issue intake</td><td class="built">built; untested against a live Ollama</td></tr>
+                <tr><td>OS isolation levels, secrets injection, egress rules</td><td class="planned">planned, phase 4</td></tr>
+                <tr><td>Planner and routines, remote nodes, asset and mail work, fork and replay</td><td class="planned">planned</td></tr>
+            </tbody>
+        </table>
+        <p class="status-note">Today an agent runs with your user's permissions and no OS sandbox; the rules and your approvals are what stand between it and your machine. Use it on repositories you don't mind it changing until phase 4 lands.</p>
+    </div>
+</section>
+
+<section class="band quick">
+    <div class="wrap quick-grid">
+        <div>
+            <p class="eyebrow">Quick start</p>
+            <h2>Three commands on the Mac, then your phone.</h2>
+            <p>Log in once to <code>claude</code> and/or <code>codex</code>, create a bot with @BotFather, then:</p>
+        </div>
+        <div class="codebox">
+            <button class="copy" type="button" data-copy="quick">Copy</button>
+            <pre><code id="quick">cargo install --path crates/shiioo
+export SHIIOO_TELEGRAM_TOKEN=...
+shiioo --workspace ~/shiioo-office install</code></pre>
+            <p class="codebox-note"><code>install</code> prints the dashboard link and the Tailscale steps. Put your Telegram id and your repositories in <code>.shiioo/config.toml</code>, restart, and send the bot <code>/run myproject fix the flaky test</code>. <a href="/getting-started/">The full walkthrough →</a></p>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="wrap">
+        <h2>Your work, delegated. Your record, intact.</h2>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="/getting-started/">Getting started</a>
+            <a class="btn" href="{{ config.extra.github }}">Source on GitHub</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+# Zola configuration for shiioo.raskell.io
+# https://www.getzola.org/documentation/getting-started/configuration/
+
+base_url = "https://shiioo.raskell.io"
+title = "Shiioo"
+description = "Shiioo is a Virtual Company OS: a staff of AI agents (Claude Code, Codex, local models) that work on your own Mac around the clock, which you direct and supervise from your phone. One Rust binary, every decision on the record."
+default_language = "en"
+
+compile_sass = true
+minify_html = true
+build_search_index = false
+generate_feeds = false
+
+[markdown]
+smart_punctuation = true
+external_links_target_blank = true
+external_links_no_referrer = true
+# Highlighting emits class names only; the colours live in sass/style.scss.
+highlighting = { style = "class", light_theme = "github-light", dark_theme = "github-dark" }
+
+[slugify]
+paths = "on"
+anchors = "on"
+
+[extra]
+pitch = "Virtual Company OS"
+tagline = "A staff of AI agents on your Mac, run from your phone."
+github = "https://github.com/raskell-io/shiioo"
+docs = "https://github.com/raskell-io/shiioo/tree/main/docs"
+keywords = "Shiioo, Virtual Company OS, agent platform, Claude Code, Codex, local models, Ollama, Telegram bot, Tailscale, Mac Studio, Rust, event sourcing, agent orchestration, approvals, self-hosted"
+
+nav_links = [
+    { name = "Getting started", url = "/getting-started/" },
+    { name = "How it works", url = "/how-it-works/" },
+    { name = "Design", url = "/design/" },
+]

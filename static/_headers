@@ -1,0 +1,5 @@
+/img/*
+  Cache-Control: public, max-age=86400
+
+/*.png
+  Cache-Control: public, max-age=86400

@@ -1,0 +1,23 @@
+# Build output
+public/
+
+# Wrangler
+.wrangler/
+.dev.vars
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# mise
+.mise.local.toml
+zola
+
+# Theme CSS that Zola writes on every build (the site styles highlighting in sass/style.scss)
+static/giallo-*.css

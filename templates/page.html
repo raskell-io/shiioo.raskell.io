@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block body_class %}article{% endblock %}
+{% block content %}
+<article class="wrap article-wrap">
+    <header class="article-head">
+        {%- if page.extra.eyebrow %}<p class="eyebrow">{{ page.extra.eyebrow }}</p>{% endif %}
+        <h1>{{ page.title }}</h1>
+        {%- if page.description %}<p class="lead">{{ page.description }}</p>{% endif %}
+    </header>
+    {%- if page.toc and page.extra.toc %}
+    <nav class="toc" aria-label="On this page">
+        <p class="toc-title">On this page</p>
+        <ol>
+            {%- for h in page.toc %}
+            <li><a href="#{{ h.id }}">{{ h.title }}</a></li>
+            {%- endfor %}
+        </ol>
+    </nav>
+    {%- endif %}
+    <div class="prose">
+        {{ page.content | safe }}
+    </div>
+    {%- if page.extra.next %}
+    <nav class="next-page" aria-label="Next">
+        <a href="{{ page.extra.next.url }}"><span class="muted">Next</span> {{ page.extra.next.title }} →</a>
+    </nav>
+    {%- endif %}
+</article>
+{% endblock %}

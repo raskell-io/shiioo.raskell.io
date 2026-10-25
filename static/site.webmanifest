@@ -1,0 +1,14 @@
+{
+  "name": "Shiioo",
+  "short_name": "Shiioo",
+  "description": "Virtual Company OS: a staff of AI agents on your Mac, run from your phone.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2B2D33",
+  "theme_color": "#2F7D73",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

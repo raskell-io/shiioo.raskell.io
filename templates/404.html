@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block meta %}
+    <title>Not found · {{ config.title }}</title>
+    <meta name="robots" content="noindex">
+{% endblock meta %}
+{% block body_class %}article{% endblock %}
+{% block content %}
+<article class="wrap article-wrap notfound">
+    <img class="pixel" src="{{ get_url(path='img/mascot.png') }}" alt="" width="128" height="128">
+    <p class="eyebrow">404</p>
+    <h1>Nobody at this desk.</h1>
+    <p class="lead">The page you asked for isn't here. The <a href="{{ get_url(path='/') }}">front desk</a> knows where everything is.</p>
+</article>
+{% endblock %}
