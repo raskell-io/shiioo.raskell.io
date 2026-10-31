@@ -174,11 +174,11 @@ Mail goes out through the office, never from the agent. `shiioo mail send` asks 
 
 ## Talking to an employee
 
-Most work is delegated and left alone. When you want to step in, you write to the run. Your message is an event in its log like anything else (`UserMessage`, appended by the office without taking the run's lease), and the agent reads it at its next step: Shiioo's own loop before its next model call, Claude Code or Codex when their current process finishes, by resuming the same session with your message as the prompt. A run that was about to finish answers your message first. Your rules apply to whatever it does next.
+Most work is delegated and left alone. When you want to step in, you write to the run. Your message is an event in its log like anything else (`UserMessage`, appended by the office without taking the run's lease), and the agent reads it at its next step: Shiioo's own loop before its next model call, Claude Code or Codex when their current process finishes, by resuming the same session with your message as the prompt. A run that was about to finish answers your message first. If it can't wait, send it **Now**: the office stops the agent mid-step, the way Ctrl-C would, and resumes the same session at once with your message and a note that its last step may have been cut short. Your rules apply to whatever it does next.
 
 A run can also wait for you. A conversation answers and parks: it gives up its lease, costs nothing while it waits, and wakes when your next message arrives. A finished run stays closed; to continue its work you follow it up. The follow-up is a new run that resumes the finished run's session on the same branch and names the run it continues, so the record of both stays intact.
 
-In the desk this is a box under every run: **Send at next turn** while it works, **Reply** while it waits, **Follow up** once a Claude Code or Codex run is done. Interrupting an agent mid-step (**Now**) and taking over its session in a terminal are designed and not built.
+In the desk this is a box under every run: **Send at next turn** or **Now** while it works, **Reply** while it waits, **Follow up** once a Claude Code or Codex run is done. Taking over an agent's session in a terminal is designed and not built.
 
 ## The office
 
