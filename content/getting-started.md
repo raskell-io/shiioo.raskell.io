@@ -333,5 +333,5 @@ The value reaches the harness and nothing else: the run's record holds the refer
 - **Codex's own sandbox is off** by default, because headless Codex cannot ask for an exception and its workspace sandbox blocks `git commit`. Codex also ignores `--max-turns` and `--max-budget-usd`; `--max-minutes` is the budget that applies to both harnesses.
 - **Approvals don't survive a server restart.** The request is in the log, but the harness that was waiting sees a denial after its own timeout (about six hours).
 - **Telegram and local models** have been tested against fakes, not yet against a real bot or a running Ollama.
-- **Messages and follow-ups to Claude Code and Codex** have been tested against stand-ins that replay recorded sessions, not yet against the real harnesses. Interrupting an agent mid-step is not built: a message waits for its current step.
+- **A message waits for the agent's current step.** Interrupting an agent mid-step is not built yet.
 - **`shiioo install` on Linux** writes a systemd user unit that nobody has exercised yet.
