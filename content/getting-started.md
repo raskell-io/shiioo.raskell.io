@@ -123,7 +123,7 @@ Expect a few `ask`s in the first days for harmless tools that aren't in the list
 
 ## The phone
 
-Open the dashboard link `install` printed on your phone once, with the `#token=…` fragment; the page stores the token locally and drops it from the address. Add it to the home screen. Open the same link on your computer and the page becomes the desk: what needs you in a sidebar, each run's log with its diff and approvals beside it. Then, in Telegram, send `/start` to your bot.
+Open the dashboard link `install` printed on your phone once, with the `#token=…` fragment; the page stores the token locally and drops it from the address. Add it to the home screen. Open the same link on your computer and the page becomes the desk: what needs you in a sidebar, runs as tabs and side by side, each run's log with its diff and approvals beside it. Then, in Telegram, send `/start` to your bot.
 
 | You send | What happens |
 |---|---|
@@ -166,7 +166,7 @@ Appended the line to README.md and committed it as f331eb4 — "docs: hello". No
 
 A failed run says `❌` and why; one that needs you says `⚠️`. The dashboard shows the same run with its live log, the diff of its branch against your `main`, Cancel, and Allow / Deny while a request is open. Pushing and opening a pull request are commands like any other: with the default rules they ask you first.
 
-To steer a run while it works, write in the box under its log: "use the existing helper, don't add a dependency". The agent reads it when it finishes its current step. Once a Claude Code or Codex run is done, the same box says **Follow up**: what you write starts a new run on the same branch that picks up the same session. On the desk, `N` starts a task, `J` jumps to the next run that needs you, `D` opens the diff and `⌘↵` sends.
+To steer a run while it works, write in the box under its log: "use the existing helper, don't add a dependency". The agent reads it when it finishes its current step. Once a Claude Code or Codex run is done, the same box says **Follow up**: what you write starts a new run on the same branch that picks up the same session. On the desk, `⌘K` finds any run or command, `N` starts a task, `J` jumps to the next run that needs you, `D` opens the diff, `\` splits the screen and `?` lists every key. Runs you open become tabs; shift-click one to open it beside the current one.
 
 ## From a terminal
 

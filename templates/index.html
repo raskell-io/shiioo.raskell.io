@@ -72,18 +72,18 @@
         <div class="chapter-copy wide">
             <p class="eyebrow"><span class="idx">03</span>The desk</p>
             <h2>Delegate from your phone. Step in from your desk.</h2>
-            <p>On a big screen the office is a desk: what needs you at the top of the sidebar, every run by repository, and a run's log as a conversation, with each tool call one row you can open, the diff of its branch next to the request to push it. Most of the time you still delegate. Sometimes the boss walks over and says "no, like this": write to an agent while it works and it reads your message when it finishes its current step; answer a run that waits for you; follow up on a finished one, and a new run picks up the same session on the same branch.</p>
+            <p>On a big screen the office is a desk: what needs you at the top of the sidebar, every run by repository, runs open as tabs and side by side in up to three panes, and a run's log as a conversation, with each tool call one row you can open, the diff of its branch next to the request to push it. Every action has a key, and ⌘K finds any run or command. Most of the time you still delegate. Sometimes the boss walks over and says "no, like this": write to an agent while it works and it reads your message when it finishes its current step; answer a run that waits for you; follow up on a finished one, and a new run picks up the same session on the same branch.</p>
         </div>
         <figure class="figure shots">
             <div class="shot-desk">
-                <img class="shot shot-dark" src="/img/desk-dark.webp" width="2400" height="1500" loading="lazy" alt="The desk in dark: a sidebar with one run that needs you, the run's log with tool calls and your message, and the push request next to the branch's diff.">
-                <img class="shot shot-light" src="/img/desk-light.webp" width="2400" height="1500" loading="lazy" alt="The desk in light: a sidebar with one run that needs you, the run's log with tool calls and your message, and the push request next to the branch's diff.">
+                <img class="shot shot-dark" src="/img/desk-dark.webp" width="3000" height="1880" loading="lazy" alt="The desk in dark: a sidebar with one run that needs you, tabs, and two runs side by side: Claude Code's flaky-test fix waiting for your approval to push, and a Codex docs pass at work.">
+                <img class="shot shot-light" src="/img/desk-light.webp" width="3000" height="1880" loading="lazy" alt="The desk in light: a sidebar with one run that needs you, tabs, and two runs side by side: Claude Code's flaky-test fix waiting for your approval to push, and a Codex docs pass at work.">
             </div>
             <div class="shot-phone">
                 <img class="shot shot-dark" src="/img/phone-run-dark.webp" width="780" height="1688" loading="lazy" alt="The same run on a phone, with Allow and Deny under the push request.">
                 <img class="shot shot-light" src="/img/phone-run.webp" width="780" height="1688" loading="lazy" alt="The same run on a phone, with Allow and Deny under the push request.">
             </div>
-            <figcaption>The same run on the desk and on the phone: Claude Code fixed a flaky test and waits for your tap to push; your note waits for its next step. Served by the office itself over your tailnet; nothing to install.</figcaption>
+            <figcaption>Two employees side by side on the desk: Claude Code fixed a flaky test and waits for your tap to push, Codex writes docs next to it. The same run on the phone, Allow and Deny under the request. Served by the office itself over your tailnet; nothing to install.</figcaption>
         </figure>
         <ul class="ticks cols">
             <li><b>Quiet until it needs you.</b> One colour, used only for what waits on you. Working runs get a calm mark, finished ones fade, and a dot shows what finished since you last looked.</li>
@@ -178,11 +178,11 @@
                 <tr><td><code>container</code> isolation, egress allow list, encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
                 <tr><td><code>/plan</code>, routines on a typed schedule, the morning report, roles</td><td class="built">built, planner verified live</td></tr>
                 <tr><td>Remote nodes, deliverables to the phone, mail with send-approval</td><td class="built">built; nodes verified live, the rest end to end over HTTP</td></tr>
-                <tr><td>The desk: a web dashboard for the big screen and the phone, live log, diff and approvals side by side</td><td class="built">built, verified in a browser</td></tr>
+                <tr><td>The desk: a web dashboard for the big screen and the phone, tabs and split panes, a command palette, live log, diff and approvals side by side</td><td class="built">built, verified in a browser</td></tr>
                 <tr><td>Messages to a working agent (at its next step, or now), runs that wait for your reply, follow-ups on a finished run</td><td class="built">built, verified live with Claude Code and Codex</td></tr>
                 <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
                 <tr><td>Talking to Shiioo: voice notes, a chief of staff you converse with</td><td class="planned">requirements draft</td></tr>
-                <tr><td>On the desk: tabs and split panes, a command palette, taking over an agent's session in a terminal; a Rust-native client</td><td class="planned">requirements draft</td></tr>
+                <tr><td>On the desk: taking over an agent's session in a terminal; a Rust-native client</td><td class="planned">designed, ADR proposed</td></tr>
                 <tr><td>Fork and replay, a node login service, mail reading</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
