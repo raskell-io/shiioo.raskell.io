@@ -168,6 +168,8 @@ A failed run says `❌` and why; one that needs you says `⚠️`. The dashboard
 
 To steer a run while it works, write in the box under its log: "use the existing helper, don't add a dependency". The agent reads it when it finishes its current step. Once a Claude Code or Codex run is done, the same box says **Follow up**: what you write starts a new run on the same branch that picks up the same session. On the desk, `⌘K` finds any run or command, `N` starts a task, `J` jumps to the next run that needs you, `D` opens the diff, `\` splits the screen and `?` lists every key. Runs you open become tabs; shift-click one to open it beside the current one.
 
+To do it yourself, press **Take over** (`T`): the agent's own terminal opens in place of the log, in the run's worktree and session, with your rules still deciding what its commands may do. **Hand back** returns the run to it, waiting for your next message or carrying on with a note.
+
 ## From a terminal
 
 The same runs work without the office, straight from a terminal on the Mac:

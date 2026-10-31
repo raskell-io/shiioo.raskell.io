@@ -178,7 +178,9 @@ Most work is delegated and left alone. When you want to step in, you write to th
 
 A run can also wait for you. A conversation answers and parks: it gives up its lease, costs nothing while it waits, and wakes when your next message arrives. A finished run stays closed; to continue its work you follow it up. The follow-up is a new run that resumes the finished run's session on the same branch and names the run it continues, so the record of both stays intact.
 
-In the desk this is a box under every run: **Send at next turn** or **Now** while it works, **Reply** while it waits, **Follow up** once a Claude Code or Codex run is done. Taking over an agent's session in a terminal is designed and not built.
+In the desk this is a box under every run: **Send at next turn** or **Now** while it works, **Reply** while it waits, **Follow up** once a Claude Code or Codex run is done. **Take over** puts you at the agent's own terminal instead.
+
+When you take a run over, the agent stops its current step and parks; the office then starts Claude Code or Codex with its own terminal interface in the run's worktree, resumed from the run's session, with the same hook as a headless run, and the desk shows that terminal. Every command the agent runs is still judged by your rules, and an `ask` waits for your tap as always. Closing the tab only detaches: the session waits for you, and another window or your phone can join it. When you hand back, the office reads what was said and done at the keyboard from the agent's own session file into the run's log, between `TakeoverStarted` and `TakeoverEnded`, and either leaves the run waiting for you or lets it carry on headless in the same session with your note. Commands you run yourself through Claude Code's `!` shell escape are yours: they skip the rules, and the log records them.
 
 ## The office
 

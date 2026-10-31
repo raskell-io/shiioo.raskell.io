@@ -72,7 +72,7 @@
         <div class="chapter-copy wide">
             <p class="eyebrow"><span class="idx">03</span>The desk</p>
             <h2>Delegate from your phone. Step in from your desk.</h2>
-            <p>On a big screen the office is a desk: what needs you at the top of the sidebar, every run by repository, runs open as tabs and side by side in up to three panes, and a run's log as a conversation, with each tool call one row you can open, the diff of its branch next to the request to push it. Every action has a key, and ⌘K finds any run or command. Most of the time you still delegate. Sometimes the boss walks over and says "no, like this": write to an agent while it works and it reads your message when it finishes its current step; answer a run that waits for you; follow up on a finished one, and a new run picks up the same session on the same branch.</p>
+            <p>On a big screen the office is a desk: what needs you at the top of the sidebar, every run by repository, runs open as tabs and side by side in up to three panes, and a run's log as a conversation, with each tool call one row you can open, the diff of its branch next to the request to push it. Every action has a key, and ⌘K finds any run or command. Most of the time you still delegate. Sometimes the boss walks over and says "no, like this": write to an agent while it works and it reads your message when it finishes its current step; answer a run that waits for you; follow up on a finished one, and a new run picks up the same session on the same branch. And sometimes the boss sits down at the keyboard: take a run over and Claude Code's or Codex's own terminal opens in the desk, resumed from the run's session, with the rules still judging every command it runs. Hand back, and it carries on headless where you left it.</p>
         </div>
         <figure class="figure shots">
             <div class="shot-desk">
@@ -89,7 +89,12 @@
             <li><b>Quiet until it needs you.</b> One colour, used only for what waits on you. Working runs get a calm mark, finished ones fade, and a dot shows what finished since you last looked.</li>
             <li><b>Talk to an employee.</b> A message goes into the run's log and the agent reads it at its next step. Your rules still apply to whatever it does next.</li>
             <li><b>Follow up, don't reopen.</b> A finished run stays closed. A follow-up is a new run that resumes the same Claude Code or Codex session on the same branch, and names the run it continues.</li>
+            <li><b>Take over, on the record.</b> At the keyboard you talk to the agent in its own terminal; a push still waits for your Allow. Afterwards the log has what was said and done there, read back from the agent's own session file.</li>
         </ul>
+        <figure class="figure">
+            <img class="shot" src="/img/takeover-dark.webp" width="3000" height="1880" loading="lazy" alt="A run taken over in the desk: Claude Code's own terminal in place of the log, a bar saying you are at the keyboard with Hand back buttons, and Claude Code's git push waiting for approval in the side panel.">
+            <figcaption>Taken over: Claude Code's own terminal, resumed from the run's session. The push it was asked for waits on your rules, and the card is next to it.</figcaption>
+        </figure>
     </div>
 </section>
 
@@ -182,7 +187,8 @@
                 <tr><td>Messages to a working agent (at its next step, or now), runs that wait for your reply, follow-ups on a finished run</td><td class="built">built, verified live with Claude Code and Codex</td></tr>
                 <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
                 <tr><td>Talking to Shiioo: voice notes, a chief of staff you converse with</td><td class="planned">requirements draft</td></tr>
-                <tr><td>On the desk: taking over an agent's session in a terminal; a Rust-native client</td><td class="planned">designed, ADR proposed</td></tr>
+                <tr><td>Taking over a run: the agent's own terminal in the desk, the rules still on, hand back to let it carry on</td><td class="built">built, verified live with Claude Code and Codex</td></tr>
+                <tr><td>A Rust-native client for the desk</td><td class="planned">designed</td></tr>
                 <tr><td>Fork and replay, a node login service, mail reading</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
