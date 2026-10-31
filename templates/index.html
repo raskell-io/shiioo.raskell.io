@@ -15,7 +15,7 @@
     <div class="wrap hero-figure">
         <figure class="figure big diagram">
             {% include "diagrams/office.svg.html" %}
-            <figcaption>One process on your machine holds the record, the rules and the workers. Agents run as employees in their own branches, or on other machines that dial in. Your phone is the only interface you need.</figcaption>
+            <figcaption>One process on your machine holds the record, the rules and the workers. Agents run as employees in their own branches, or on other machines that dial in. Your phone is all you need away from your desk.</figcaption>
         </figure>
     </div>
 </section>
@@ -67,10 +67,36 @@
     </div>
 </section>
 
-<section class="chapter" id="where">
+<section class="chapter" id="desk">
     <div class="wrap">
         <div class="chapter-copy wide">
-            <p class="eyebrow"><span class="idx">03</span>Where it runs</p>
+            <p class="eyebrow"><span class="idx">03</span>The desk</p>
+            <h2>Delegate from your phone. Step in from your desk.</h2>
+            <p>On a big screen the office is a desk: what needs you at the top of the sidebar, every run by repository, and a run's log as a conversation, with each tool call one row you can open, the diff of its branch next to the request to push it. Most of the time you still delegate. Sometimes the boss walks over and says "no, like this": write to an agent while it works and it reads your message when it finishes its current step; answer a run that waits for you; follow up on a finished one, and a new run picks up the same session on the same branch.</p>
+        </div>
+        <figure class="figure shots">
+            <div class="shot-desk">
+                <img class="shot shot-dark" src="/img/desk-dark.webp" width="2400" height="1500" loading="lazy" alt="The desk in dark: a sidebar with one run that needs you, the run's log with tool calls and your message, and the push request next to the branch's diff.">
+                <img class="shot shot-light" src="/img/desk-light.webp" width="2400" height="1500" loading="lazy" alt="The desk in light: a sidebar with one run that needs you, the run's log with tool calls and your message, and the push request next to the branch's diff.">
+            </div>
+            <div class="shot-phone">
+                <img class="shot shot-dark" src="/img/phone-run-dark.webp" width="780" height="1688" loading="lazy" alt="The same run on a phone, with Allow and Deny under the push request.">
+                <img class="shot shot-light" src="/img/phone-run.webp" width="780" height="1688" loading="lazy" alt="The same run on a phone, with Allow and Deny under the push request.">
+            </div>
+            <figcaption>The same run on the desk and on the phone: Claude Code fixed a flaky test and waits for your tap to push; your note waits for its next step. Served by the office itself over your tailnet; nothing to install.</figcaption>
+        </figure>
+        <ul class="ticks cols">
+            <li><b>Quiet until it needs you.</b> One colour, used only for what waits on you. Working runs get a calm mark, finished ones fade, and a dot shows what finished since you last looked.</li>
+            <li><b>Talk to an employee.</b> A message goes into the run's log and the agent reads it at its next step. Your rules still apply to whatever it does next.</li>
+            <li><b>Follow up, don't reopen.</b> A finished run stays closed. A follow-up is a new run that resumes the same Claude Code or Codex session on the same branch, and names the run it continues.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="chapter alt" id="where">
+    <div class="wrap">
+        <div class="chapter-copy wide">
+            <p class="eyebrow"><span class="idx">04</span>Where it runs</p>
             <h2>Your user, a container, or a sandbox. Here, or on the Spark.</h2>
             <p>At the default level an agent is your user in its own branch. Set a repository to <code>container</code> and each run gets a Docker container with a read-only root, only its worktree mounted, and a network whose only way out is a proxy that admits the hosts you allow. Secrets are references the office resolves at start and redacts from everything it records.</p>
         </div>
@@ -87,10 +113,10 @@
     </div>
 </section>
 
-<section class="chapter alt" id="day">
+<section class="chapter" id="day">
     <div class="wrap">
         <div class="chapter-copy wide">
-            <p class="eyebrow"><span class="idx">04</span>A day at the office</p>
+            <p class="eyebrow"><span class="idx">05</span>A day at the office</p>
             <h2>You set direction. The company does the work.</h2>
             <p>The morning report counts what finished, what needs you and which branches await review. <code>/plan</code> hands a goal to the chief of staff, who reads the repository and proposes work items; your approval turns them into issues the office works through. Routines run on a schedule you can type. Files a run produced land on your phone; mail goes out only after you say so.</p>
         </div>
@@ -101,10 +127,10 @@
     </div>
 </section>
 
-<section class="chapter" id="staff">
+<section class="chapter alt" id="staff">
     <div class="wrap">
         <div class="chapter-copy wide">
-            <p class="eyebrow"><span class="idx">05</span>The staff</p>
+            <p class="eyebrow"><span class="idx">06</span>The staff</p>
             <h2>Hire the agents you already have.</h2>
         </div>
         <div class="roster">
@@ -126,34 +152,37 @@
             <article class="card">
                 <div class="portrait p4" role="img" aria-label="Pixel portrait of the Shiioo mascot, in a suit"></div>
                 <h3>The chief of staff</h3>
-                <p>Not a model, a role the office plays: <code>/plan</code> runs a read-only planning job and turns its answer into a plan you approve; the report, the routines and the capacity broker decide who works when. Soon a conversation you can have while walking: that phase is a requirements draft.</p>
+                <p>Not a model, a role the office plays: <code>/plan</code> runs a read-only planning job and turns its answer into a plan you approve; the report, the routines and the capacity broker decide who works when. Runs that wait for your reply and messages to a working agent are built; voice notes and a chief of staff you talk to while walking are next.</p>
             </article>
         </div>
         <p class="staff-note">Tasks go to the first employee whose subscription windows are under their limits; <code>/capacity</code> shows what is left this week.</p>
     </div>
 </section>
 
-<section class="chapter alt" id="status">
+<section class="chapter" id="status">
     <div class="wrap">
         <div class="chapter-copy wide">
-            <p class="eyebrow"><span class="idx">06</span>Where it stands</p>
-            <h2>Six phases built. Honestly marked.</h2>
+            <p class="eyebrow"><span class="idx">07</span>Where it stands</p>
+            <h2>Six phases built, two under way. Honestly marked.</h2>
         </div>
         <figure class="figure diagram">
             {% include "diagrams/roadmap.svg.html" %}
-            <figcaption>Six phases built and verified against the real tools. Conversation is a requirements draft; replay is planned.</figcaption>
+            <figcaption>Six phases built and verified against the real tools. Conversation and the desk are under way; replay is planned.</figcaption>
         </figure>
         <table class="status-table">
             <tbody>
                 <tr><td>Kernel: event log, hash chain, leases with fencing, crash recovery, embedded store</td><td class="built">built, conformance-tested, plus a seeded crash simulation</td></tr>
                 <tr><td>Claude Code and Codex as employees, worktree per run, resume after a crash</td><td class="built">built, verified with the real binaries</td></tr>
-                <tr><td>Rules, approvals through the harness hook, cancellation, Telegram bot and mobile dashboard</td><td class="built">built, approval loop verified live</td></tr>
+                <tr><td>Rules, approvals through the harness hook, cancellation, Telegram bot</td><td class="built">built, approval loop verified live</td></tr>
                 <tr><td>Capacity broker, local models, GitHub-issue intake</td><td class="built">built; untested against a live Ollama</td></tr>
                 <tr><td><code>container</code> isolation, egress allow list, encrypted secrets with redaction</td><td class="built">built, verified live with Codex in a container</td></tr>
                 <tr><td><code>/plan</code>, routines on a typed schedule, the morning report, roles</td><td class="built">built, planner verified live</td></tr>
                 <tr><td>Remote nodes, deliverables to the phone, mail with send-approval</td><td class="built">built; nodes verified live, the rest end to end over HTTP</td></tr>
+                <tr><td>The desk: a web dashboard for the big screen and the phone, live log, diff and approvals side by side</td><td class="built">built, verified in a browser</td></tr>
+                <tr><td>Messages to a working agent, runs that wait for your reply, follow-ups on a finished run</td><td class="built">built; live check with the real harnesses pending</td></tr>
                 <tr><td><code>openshell</code> isolation</td><td class="planned">experimental adapter, not run against a gateway</td></tr>
                 <tr><td>Talking to Shiioo: voice notes, a chief of staff you converse with</td><td class="planned">requirements draft</td></tr>
+                <tr><td>On the desk: tabs and split panes, a command palette, taking over an agent's session in a terminal; a Rust-native client</td><td class="planned">requirements draft</td></tr>
                 <tr><td>Fork and replay, a node login service, mail reading</td><td class="planned">planned</td></tr>
             </tbody>
         </table>
@@ -164,7 +193,7 @@
 <section class="chapter quick" id="start">
     <div class="wrap quick-grid">
         <div>
-            <p class="eyebrow"><span class="idx">07</span>Quick start</p>
+            <p class="eyebrow"><span class="idx">08</span>Quick start</p>
             <h2>Three commands on the Mac, then your phone.</h2>
             <p>Log in once to <code>claude</code> and/or <code>codex</code>, create a bot with @BotFather, then:</p>
         </div>

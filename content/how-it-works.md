@@ -172,17 +172,25 @@ Code leaves as a branch and a pull request. Anything else a run produces, a rend
 
 Mail goes out through the office, never from the agent. `shiioo mail send` asks the office; the office treats the request as a tool call named `mail.send`, judged by the rules like any other (the default asks you), sends from the account in its configuration with the password from the secret store, and records `MailSent` in the run. Reading a mailbox is not built.
 
+## Talking to an employee
+
+Most work is delegated and left alone. When you want to step in, you write to the run. Your message is an event in its log like anything else (`UserMessage`, appended by the office without taking the run's lease), and the agent reads it at its next step: Shiioo's own loop before its next model call, Claude Code or Codex when their current process finishes, by resuming the same session with your message as the prompt. A run that was about to finish answers your message first. Your rules apply to whatever it does next.
+
+A run can also wait for you. A conversation answers and parks: it gives up its lease, costs nothing while it waits, and wakes when your next message arrives. A finished run stays closed; to continue its work you follow it up. The follow-up is a new run that resumes the finished run's session on the same branch and names the run it continues, so the record of both stays intact.
+
+In the desk this is a box under every run: **Send at next turn** while it works, **Reply** while it waits, **Follow up** once a Claude Code or Codex run is done. Interrupting an agent mid-step (**Now**) and taking over its session in a terminal are designed and not built.
+
 ## The office
 
-The office is one Rust binary with an embedded database (redb), running as one process on your machine. It is the server (the record, the rules and approvals, the capacity tracker, the HTTP API with a resumable event stream, the mobile dashboard, the Telegram bot, the workers) and the node that runs the agents. No Postgres, no containers. Remote nodes that dial out to the server are planned; today the only node is the one inside the process.
+The office is one Rust binary with an embedded database (redb), running as one process on your machine. It is the server (the record, the rules and approvals, the capacity tracker, the HTTP API with a resumable event stream, the dashboard, the Telegram bot, the workers) and the node that runs the agents. No Postgres, no containers. Other machines can join as nodes that dial out to the office (see Machines).
 
-Nothing listens publicly. The API binds to loopback and every call needs a bearer token. The dashboard reaches your phone over Tailscale (`tailscale serve --bg 7878`), with a certificate from Tailscale and only your devices on the network. The Telegram bot long-polls Telegram's servers, so it needs no inbound connectivity, and it ignores every account but yours.
+Nothing listens publicly. The API binds to loopback and every call needs a bearer token. The dashboard, the desk, reaches your phone and your other computers over Tailscale (`tailscale serve --bg 7878`), with a certificate from Tailscale and only your devices on the network. The Telegram bot long-polls Telegram's servers, so it needs no inbound connectivity, and it ignores every account but yours.
 
 Everything the office keeps is in `.shiioo/` inside its directory: the database, the tool journal, one worktree per run, `config.toml`, `rules.toml`, the tokens, the intake state, the logs. Copy the directory and the office moves.
 
 ## The API
 
-Everything the phone and the dashboard do goes through one HTTP API on loopback, with the bearer token from `.shiioo/api-token`. Runs are created with `POST /v1/runs` (an `Idempotency-Key` header makes a retried create return the same run), listed, read and cancelled. A run's events stream over Server-Sent Events, where each event's id is its `seq`, so a client that reconnects with `Last-Event-ID` resumes exactly where it stopped. Approvals, capacity and employees have their own routes, which the hook, the buttons and the Telegram bot use. The dashboard is static files served by the same binary; it keeps the token in the browser's local storage and talks to the same routes.
+Everything the phone and the dashboard do goes through one HTTP API on loopback, with the bearer token from `.shiioo/api-token`. Runs are created with `POST /v1/runs` (an `Idempotency-Key` header makes a retried create return the same run), listed, read and cancelled. A run's events stream over Server-Sent Events, where each event's id is its `seq`, so a client that reconnects with `Last-Event-ID` resumes exactly where it stopped; a second stream carries every run's state as it changes, which is how the desk's sidebar stays current without polling. Messages (`POST /v1/runs/{id}/messages`) and follow-ups (`POST /v1/runs/{id}/follow-up`) take an `Idempotency-Key` too, so a retry never delivers twice. Approvals, capacity and employees have their own routes, which the hook, the buttons and the Telegram bot use. The desk is static files served by the same binary, plain modules with no build step; it keeps the token in the browser's local storage and talks to the same routes, so anything it shows can be fetched with `curl`, and a native client later is one more caller of the same API.
 
 ## What you write
 

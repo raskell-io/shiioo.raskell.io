@@ -177,6 +177,15 @@ h3 { font-size: 1.2rem; font-variation-settings: "opsz" 24; letter-spacing: -0.0
 .figure-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media (max-width: 900px) { .figure-pair { grid-template-columns: 1fr; } }
 .figure-stack { display: grid; gap: 20px; }
+/* Screenshots of the desk: the dark shot by default, the light one with the light theme. */
+.figure.shots { display: grid; grid-template-columns: minmax(0, 4.2fr) minmax(0, 1fr); gap: clamp(12px, 2vw, 24px); align-items: start; }
+.figure.shots figcaption { grid-column: 1 / -1; }
+.shot { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); }
+.shot-phone .shot { border-radius: 18px; }
+.shot-light { display: none; }
+:root[data-theme="light"] .shot-light { display: block; }
+:root[data-theme="light"] .shot-dark { display: none; }
+@media (max-width: 720px) { .figure.shots { grid-template-columns: 1fr; } .shot-phone { max-width: 280px; margin: 0 auto; } }
 
 // Chapters
 .chapter { padding: clamp(56px, 8vw, 120px) 0; border-top: 1px solid var(--line); }

@@ -123,7 +123,7 @@ Expect a few `ask`s in the first days for harmless tools that aren't in the list
 
 ## The phone
 
-Open the dashboard link `install` printed on your phone once, with the `#token=…` fragment; the page stores the token locally and drops it from the address. Add it to the home screen. Then, in Telegram, send `/start` to your bot.
+Open the dashboard link `install` printed on your phone once, with the `#token=…` fragment; the page stores the token locally and drops it from the address. Add it to the home screen. Open the same link on your computer and the page becomes the desk: what needs you in a sidebar, each run's log with its diff and approvals beside it. Then, in Telegram, send `/start` to your bot.
 
 | You send | What happens |
 |---|---|
@@ -164,7 +164,9 @@ Tap. The harness, which has been waiting on the answer, continues. When the run 
 Appended the line to README.md and committed it as f331eb4 — "docs: hello". Nothing was pushed.
 ```
 
-A failed run says `❌` and why; one that needs you says `⚠️`. The dashboard shows the same run with its live log, a Diff button for the branch against your `main`, Cancel, and the Allow / Deny card while a request is open. Pushing and opening a pull request are commands like any other: with the default rules they ask you first.
+A failed run says `❌` and why; one that needs you says `⚠️`. The dashboard shows the same run with its live log, the diff of its branch against your `main`, Cancel, and Allow / Deny while a request is open. Pushing and opening a pull request are commands like any other: with the default rules they ask you first.
+
+To steer a run while it works, write in the box under its log: "use the existing helper, don't add a dependency". The agent reads it when it finishes its current step. Once a Claude Code or Codex run is done, the same box says **Follow up**: what you write starts a new run on the same branch that picks up the same session. On the desk, `N` starts a task, `J` jumps to the next run that needs you, `D` opens the diff and `⌘↵` sends.
 
 ## From a terminal
 
@@ -331,4 +333,5 @@ The value reaches the harness and nothing else: the run's record holds the refer
 - **Codex's own sandbox is off** by default, because headless Codex cannot ask for an exception and its workspace sandbox blocks `git commit`. Codex also ignores `--max-turns` and `--max-budget-usd`; `--max-minutes` is the budget that applies to both harnesses.
 - **Approvals don't survive a server restart.** The request is in the log, but the harness that was waiting sees a denial after its own timeout (about six hours).
 - **Telegram and local models** have been tested against fakes, not yet against a real bot or a running Ollama.
+- **Messages and follow-ups to Claude Code and Codex** have been tested against stand-ins that replay recorded sessions, not yet against the real harnesses. Interrupting an agent mid-step is not built: a message waits for its current step.
 - **`shiioo install` on Linux** writes a systemd user unit that nobody has exercised yet.
